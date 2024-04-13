@@ -1,4 +1,4 @@
-import type { Metadata, Viewport } from 'next'
+import type { Viewport } from 'next'
 import { ClerkProvider } from '@clerk/nextjs'
 
 import '@/styles/globals.css'
@@ -7,10 +7,10 @@ import '@/styles/globals.css'
 // import { absoluteUrl, cn } from '@/lib/utils'
 // import { Analytics } from '@/components/analytics'
 // import { TailwindIndicator } from '@/components/tailwind-indicator'
-import { cn } from 'lib/utils'
-import { fontHeading, fontMono, fontSans } from 'lib/fonts'
-import { Toaster } from 'components/ui/toaster'
-import { ThemeProvider } from 'components/providers'
+import { cn } from '@/lib/utils'
+import { fontHeading, fontMono, fontSans } from '@/lib/fonts'
+import { Toaster } from '@/components/ui/toaster'
+import { ThemeProvider } from '@/components/providers'
 
 // export const metadata: Metadata = {
 //   metadataBase: new URL(env.NEXT_PUBLIC_APP_URL),

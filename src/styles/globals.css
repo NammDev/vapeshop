@@ -59,7 +59,7 @@
 }
 
 @layer components {
-  .zoom-image [data-rmiz-modal-overlay='visible'] {
+  .zoom-image [data-rmiz-modal-overlay="visible"] {
     @apply bg-background/10 backdrop-blur;
   }
 
