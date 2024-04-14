@@ -1,7 +1,7 @@
 import { currentUser } from '@clerk/nextjs'
 import { PropsWithChildren } from 'react'
 
-// import { SiteFooter } from '@/components/layouts/site-footer'
+import { SiteFooter } from '@/components/layouts/site-footer'
 import { SiteHeader } from '@/components/layouts/site-header'
 
 export default async function LobyLayout({ children }: PropsWithChildren) {
@@ -12,7 +12,7 @@ export default async function LobyLayout({ children }: PropsWithChildren) {
     <div className='relative flex min-h-screen flex-col'>
       <SiteHeader user={user} />
       <main className='flex-1'>{children}</main>
-      {/* <SiteFooter /> */}
+      <SiteFooter />
     </div>
   )
 }
