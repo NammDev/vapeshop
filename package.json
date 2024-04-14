@@ -8,12 +8,12 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
+    "db:migrate": "tsx src/db/migrate.ts",
+    "db:studio": "drizzle-kit studio",
     "db:introspect": "drizzle-kit introspect:pg",
     "db:push": "drizzle-kit push:pg",
-    "db:migrate": "tsx src/db/migrate.ts",
     "db:drop-migration": "drizzle-kit drop --config=drizzle.config.ts",
-    "db:seed": "tsc src/db/seed.ts",
-    "db:studio": "drizzle-kit studio"
+    "db:seed": "tsc src/db/seed.ts"
   },
   "dependencies": {
     "@clerk/nextjs": "^4.29.12",
@@ -31,6 +31,7 @@
     "nanoid": "^5.0.7",
     "next": "14.2.1",
     "next-themes": "^0.3.0",
+    "pg": "^8.11.5",
     "postgres": "^3.4.4",
     "react": "^18",
     "react-dom": "^18",
