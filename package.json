@@ -12,7 +12,7 @@
     "db:push": "drizzle-kit push:pg",
     "db:migrate": "tsc src/db/migrate.ts",
     "db:drop-migration": "drizzle-kit drop --config=drizzle.config.ts",
-    "db:seed": "ts-node src/db/seed.ts",
+    "db:seed": "tsc src/db/seed.ts",
     "db:studio": "drizzle-kit studio"
   },
   "dependencies": {
