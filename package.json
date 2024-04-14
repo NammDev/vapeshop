@@ -10,7 +10,7 @@
     "lint": "next lint",
     "db:introspect": "drizzle-kit introspect:pg",
     "db:push": "drizzle-kit push:pg",
-    "db:migrate": "tsc src/db/migrate.ts",
+    "db:migrate": "tsx src/db/migrate.ts",
     "db:drop-migration": "drizzle-kit drop --config=drizzle.config.ts",
     "db:seed": "tsc src/db/seed.ts",
     "db:studio": "drizzle-kit studio"
@@ -25,6 +25,7 @@
     "@tailwindcss/typography": "^0.5.12",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.0",
+    "dotenv": "^16.4.5",
     "drizzle-kit": "^0.20.14",
     "drizzle-orm": "^0.30.8",
     "nanoid": "^5.0.7",
@@ -46,6 +47,7 @@
     "postcss": "^8",
     "tailwindcss": "^3.4.1",
     "ts-node": "^10.9.2",
+    "tsx": "^4.7.2",
     "typescript": "^5.4.5"
   }
 }
