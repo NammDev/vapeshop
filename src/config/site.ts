@@ -1,7 +1,6 @@
-import type { FooterItem } from '@/types/index'
-
-// import { productConfig } from '@/config/product'
-// import { slugify } from '@/lib/utils'
+import type { FooterItem, MainNavItem } from '@/types/index'
+import { productConfig } from './product'
+import { slugify } from '@/lib/utils'
 
 export type SiteConfig = typeof siteConfig
 
@@ -19,48 +18,48 @@ export const siteConfig = {
   url: 'https://skateshop.sadmn.com',
   ogImage: 'https://skateshop.sadmn.com/opengraph-image.png',
   links,
-  //   mainNav: [
-  //     {
-  //       title: 'Lobby',
-  //       items: [
-  //         {
-  //           title: 'Products',
-  //           href: '/products',
-  //           description: 'All the products we have to offer.',
-  //           items: [],
-  //         },
-  //         {
-  //           title: 'Build a Board',
-  //           href: '/build-a-board',
-  //           description: 'Build your own custom skateboard.',
-  //           items: [],
-  //         },
-  //         {
-  //           title: 'Blog',
-  //           href: '/blog',
-  //           description: 'Read our latest blog posts.',
-  //           items: [],
-  //         },
-  //       ],
-  //     },
-  //     ...productConfig.categories.map((category) => ({
-  //       title: category.name,
-  //       items: [
-  //         {
-  //           title: 'All',
-  //           href: `/categories/${slugify(category.name)}`,
-  //           description: `All ${category.name}.`,
-  //           items: [],
-  //         },
-  //         ...category.subcategories.map((subcategory) => ({
-  //           title: subcategory.name,
-  //           href: `/categories/${slugify(category.name)}/${subcategory.slug}`,
-  //           description: subcategory.description,
-  //           items: [],
-  //         })),
-  //       ],
-  //     })),
-  //   ] satisfies MainNavItem[],
+  mainNav: [
+    {
+      title: 'Lobby',
+      items: [
+        {
+          title: 'Products',
+          href: '/products',
+          description: 'All the products we have to offer.',
+          items: [],
+        },
+        {
+          title: 'Build a Board',
+          href: '/build-a-board',
+          description: 'Build your own custom skateboard.',
+          items: [],
+        },
+        {
+          title: 'Blog',
+          href: '/blog',
+          description: 'Read our latest blog posts.',
+          items: [],
+        },
+      ],
+    },
+    ...productConfig.categories.map((category) => ({
+      title: category.name,
+      items: [
+        {
+          title: 'All',
+          href: `/categories/${slugify(category.name)}`,
+          description: `All ${category.name}.`,
+          items: [],
+        },
+        ...category.subcategories.map((subcategory) => ({
+          title: subcategory.name,
+          href: `/categories/${slugify(category.name)}/${subcategory.slug}`,
+          description: subcategory.description,
+          items: [],
+        })),
+      ],
+    })),
+  ] satisfies MainNavItem[],
   footerNav: [
     {
       title: 'Credits',

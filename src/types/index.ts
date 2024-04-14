@@ -5,25 +5,25 @@ import { type SQL } from 'drizzle-orm'
 import { type z } from 'zod'
 
 // import { type userPrivateMetadataSchema } from '@/lib/validations/auth'
-// import type { Icons } from '@/components/icons'
+import type { Icons } from '@/components/app-ui/icons'
 
-// export interface NavItem {
-//   title: string
-//   href?: string
-//   disabled?: boolean
-//   external?: boolean
-//   icon?: keyof typeof Icons
-//   label?: string
-//   description?: string
-// }
+export interface NavItem {
+  title: string
+  href?: string
+  disabled?: boolean
+  external?: boolean
+  icon?: keyof typeof Icons
+  label?: string
+  description?: string
+}
 
-// export interface NavItemWithChildren extends NavItem {
-//   items: NavItemWithChildren[]
-// }
+export interface NavItemWithChildren extends NavItem {
+  items: NavItemWithChildren[]
+}
 
-// export interface NavItemWithOptionalChildren extends NavItem {
-//   items?: NavItemWithChildren[]
-// }
+export interface NavItemWithOptionalChildren extends NavItem {
+  items?: NavItemWithChildren[]
+}
 
 export interface FooterItem {
   title: string
@@ -34,7 +34,7 @@ export interface FooterItem {
   }[]
 }
 
-// export type MainNavItem = NavItemWithOptionalChildren
+export type MainNavItem = NavItemWithOptionalChildren
 
 // export type SidebarNavItem = NavItemWithChildren
 
