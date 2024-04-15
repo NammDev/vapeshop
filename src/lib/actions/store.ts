@@ -13,7 +13,7 @@ import { and, asc, count, desc, eq, isNull, not, sql } from 'drizzle-orm'
 import { type z } from 'zod'
 
 import { slugify } from '@/lib/utils'
-import { type addStoreSchema } from '@/lib/validations/store'
+import { updateStoreSchema, type addStoreSchema } from '@/lib/validations/store'
 import { getErrorMessage } from '../handle-error'
 
 export async function getFeaturedStores() {
@@ -200,78 +200,78 @@ export async function addStore(input: z.infer<typeof addStoreSchema> & { userId:
   }
 }
 
-// export async function updateStore(storeId: string, fd: FormData) {
-//   noStore()
-//   try {
-//     const input = updateStoreSchema.parse({
-//       name: fd.get('name'),
-//       description: fd.get('description'),
-//     })
+export async function updateStore(storeId: string, fd: FormData) {
+  noStore()
+  try {
+    const input = updateStoreSchema.parse({
+      name: fd.get('name'),
+      description: fd.get('description'),
+    })
 
-//     const storeWithSameName = await db.query.stores.findFirst({
-//       where: and(eq(stores.name, input.name), not(eq(stores.id, storeId))),
-//       columns: {
-//         id: true,
-//       },
-//     })
+    const storeWithSameName = await db.query.stores.findFirst({
+      where: and(eq(stores.name, input.name), not(eq(stores.id, storeId))),
+      columns: {
+        id: true,
+      },
+    })
 
-//     if (storeWithSameName) {
-//       throw new Error('Store name already taken')
-//     }
+    if (storeWithSameName) {
+      throw new Error('Store name already taken')
+    }
 
-//     await db
-//       .update(stores)
-//       .set({
-//         name: input.name,
-//         description: input.description,
-//       })
-//       .where(eq(stores.id, storeId))
+    await db
+      .update(stores)
+      .set({
+        name: input.name,
+        description: input.description,
+      })
+      .where(eq(stores.id, storeId))
 
-//     revalidateTag('user-stores')
-//     revalidatePath(`/dashboard/stores/${storeId}`)
+    revalidateTag('user-stores')
+    revalidatePath(`/dashboard/stores/${storeId}`)
 
-//     return {
-//       data: null,
-//       error: null,
-//     }
-//   } catch (err) {
-//     return {
-//       data: null,
-//       error: getErrorMessage(err),
-//     }
-//   }
-// }
+    return {
+      data: null,
+      error: null,
+    }
+  } catch (err) {
+    return {
+      data: null,
+      error: getErrorMessage(err),
+    }
+  }
+}
 
-// export async function deleteStore(storeId: string) {
-//   noStore()
-//   try {
-//     const store = await db.query.stores.findFirst({
-//       where: eq(stores.id, storeId),
-//       columns: {
-//         id: true,
-//       },
-//     })
+export async function deleteStore(storeId: string) {
+  noStore()
+  try {
+    const store = await db.query.stores.findFirst({
+      where: eq(stores.id, storeId),
+      columns: {
+        id: true,
+      },
+    })
 
-//     if (!store) {
-//       throw new Error('Store not found')
-//     }
+    if (!store) {
+      throw new Error('Store not found')
+    }
 
-//     await db.delete(stores).where(eq(stores.id, storeId))
+    await db.delete(stores).where(eq(stores.id, storeId))
 
-//     // Delete all products of this store
-//     await db.delete(products).where(eq(products.storeId, storeId))
+    // Delete all products of this store
+    // await db.delete(products).where(eq(products.storeId, storeId))
 
-//     const path = '/dashboard/stores'
-//     revalidatePath(path)
+    const path = '/dashboard/stores'
+    revalidatePath(path)
 
-//     return {
-//       data: null,
-//       error: null,
-//     }
-//   } catch (err) {
-//     return {
-//       data: null,
-//       error: getErrorMessage(err),
-//     }
-//   }
-// }
+    return {
+      data: null,
+      error: null,
+    }
+  } catch (err) {
+    return {
+      data: null,
+      error: getErrorMessage(err),
+    }
+  }
+}
