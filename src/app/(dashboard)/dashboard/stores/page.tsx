@@ -3,8 +3,7 @@ import type { Metadata } from 'next'
 import { redirect } from 'next/navigation'
 // import { env } from '@/env.js'
 
-// import { getStoresByUserId } from '@/lib/actions/store'
-// import { getCacheduser, getProgress } from '@/lib/actions/user'
+// import {  getProgress } from '@/lib/actions/user'
 import {
   PageHeader,
   PageHeaderDescription,
@@ -14,8 +13,8 @@ import { Shell } from '@/components/app-ui/shell'
 import { StoreCardSkeleton } from '@/components/skeletons/store-card-skeleton'
 import { AddStoreDialog } from './_components/add-store-dialog'
 import { getCacheduser } from '@/lib/actions/user'
-
-// import { Stores } from './_components/stores'
+import { getStoresByUserId } from '@/lib/actions/store'
+import { Stores } from './_components/stores'
 
 export const metadata: Metadata = {
   //   metadataBase: new URL(env.NEXT_PUBLIC_APP_URL),
@@ -30,7 +29,7 @@ export default async function StoresPage() {
     redirect('/signin')
   }
 
-  //   const storesPromise = getStoresByUserId({ userId: user.id })
+  const storesPromise = getStoresByUserId({ userId: user.id })
   //   const progressPromise = getProgress({ userId: user.id })
 
   return (
@@ -53,8 +52,7 @@ export default async function StoresPage() {
             <StoreCardSkeleton key={i} />
           ))}
         >
-          Stores
-          {/* <Stores storesPromise={storesPromise} /> */}
+          <Stores storesPromise={storesPromise} />
         </React.Suspense>
       </section>
     </Shell>

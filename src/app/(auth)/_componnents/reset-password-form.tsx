@@ -8,7 +8,6 @@ import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 import type { z } from 'zod'
 
-import { showErrorToast } from '@/lib/handle-error'
 import { checkEmailSchema } from '@/lib/validations/auth'
 import { Button } from '@/components/ui/button'
 import {
@@ -21,6 +20,7 @@ import {
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { Icons } from '@/components/app-ui/icons'
+import { showErrorToast } from '@/lib/handle-error'
 
 type Inputs = z.infer<typeof checkEmailSchema>
 

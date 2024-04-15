@@ -12,58 +12,62 @@ import type { SearchParams } from '@/types'
 import { and, asc, count, desc, eq, isNull, not, sql } from 'drizzle-orm'
 import { type z } from 'zod'
 
-import { getErrorMessage } from '@/lib/handle-error'
 import { slugify } from '@/lib/utils'
 import { type addStoreSchema } from '@/lib/validations/store'
+import { getErrorMessage } from '../handle-error'
 
-// export async function getFeaturedStores() {
-//   return await cache(
-//     async () => {
-//       return db
-//         .select({
-//           id: stores.id,
-//           name: stores.name,
-//           description: stores.description,
-//           stripeAccountId: stores.stripeAccountId,
-//         })
-//         .from(stores)
-//         .limit(4)
-//         .leftJoin(products, eq(products.storeId, stores.id))
-//         .groupBy(stores.id)
-//         .orderBy(desc(stores.active), desc(sql<number>`count(*)`))
-//     },
-//     ['featured-stores'],
-//     {
-//       revalidate: 3600, // every hour
-//       tags: ['featured-stores'],
-//     }
-//   )()
-// }
+export async function getFeaturedStores() {
+  return await cache(
+    async () => {
+      return (
+        db
+          .select({
+            id: stores.id,
+            name: stores.name,
+            description: stores.description,
+            stripeAccountId: stores.stripeAccountId,
+          })
+          .from(stores)
+          .limit(4)
+          // .leftJoin(products, eq(products.storeId, stores.id))
+          .groupBy(stores.id)
+          .orderBy(desc(stores.active), desc(sql<number>`count(*)`))
+      )
+    },
+    ['featured-stores'],
+    {
+      revalidate: 3600, // every hour
+      tags: ['featured-stores'],
+    }
+  )()
+}
 
-// export async function getStoresByUserId(input: { userId: string }) {
-//   return await cache(
-//     async () => {
-//       return db
-//         .select({
-//           id: stores.id,
-//           name: stores.name,
-//           slug: stores.slug,
-//           description: stores.description,
-//           stripeAccountId: stores.stripeAccountId,
-//         })
-//         .from(stores)
-//         .leftJoin(products, eq(products.storeId, stores.id))
-//         .groupBy(stores.id)
-//         .orderBy(desc(stores.stripeAccountId), desc(sql<number>`count(*)`))
-//         .where(eq(stores.userId, input.userId))
-//     },
-//     [`stores-${input.userId}`],
-//     {
-//       revalidate: 900,
-//       tags: [`stores-${input.userId}`],
-//     }
-//   )()
-// }
+export async function getStoresByUserId(input: { userId: string }) {
+  return await cache(
+    async () => {
+      return (
+        db
+          .select({
+            id: stores.id,
+            name: stores.name,
+            slug: stores.slug,
+            description: stores.description,
+            stripeAccountId: stores.stripeAccountId,
+          })
+          .from(stores)
+          // .leftJoin(products, eq(products.storeId, stores.id))
+          .groupBy(stores.id)
+          .orderBy(desc(stores.stripeAccountId), desc(sql<number>`count(*)`))
+          .where(eq(stores.userId, input.userId))
+      )
+    },
+    [`stores-${input.userId}`],
+    {
+      revalidate: 900,
+      tags: [`stores-${input.userId}`],
+    }
+  )()
+}
 
 // export async function getStores(input: SearchParams) {
 //   noStore()

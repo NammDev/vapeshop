@@ -8,7 +8,6 @@ import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 import type { z } from 'zod'
 
-import { showErrorToast } from '@/lib/handle-error'
 import { resetPasswordSchema } from '@/lib/validations/auth'
 import { Button } from '@/components/ui/button'
 import {
@@ -22,6 +21,7 @@ import {
 import { Input } from '@/components/ui/input'
 import { Icons } from '@/components/app-ui/icons'
 import { PasswordInput } from '@/components/app-ui/password-input'
+import { showErrorToast } from '@/lib/handle-error'
 
 type Inputs = z.infer<typeof resetPasswordSchema>
 
