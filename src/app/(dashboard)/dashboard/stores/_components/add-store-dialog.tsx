@@ -97,6 +97,7 @@ export function AddStoreDialog({
 
       if (store) {
         // router.push(`/dashboard/stores/${store.id}`)
+        router.push(`/dashboard/stores`)
         toast.success('Store created')
         return
       }
