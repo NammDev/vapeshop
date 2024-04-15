@@ -7,7 +7,7 @@ import {
   PageHeaderHeading,
 } from '@/components/app-ui/page-header'
 import { Shell } from '@/components/app-ui/shell'
-// import { StoreTabs } from "@/components/store-tabs"
+import { StoreTabs } from './_components/store-tabs'
 
 interface StoreLayoutProps extends React.PropsWithChildren {
   params: {
@@ -30,7 +30,7 @@ export default async function StoreLayout({ children, params }: StoreLayoutProps
         <PageHeaderHeading size='sm'>Dashboard</PageHeaderHeading>
         <PageHeaderDescription size='sm'>Manage your store</PageHeaderDescription>
       </PageHeader>
-      {/* <StoreTabs storeId={storeId} /> */}
+      <StoreTabs storeId={storeId} />
       <div className='overflow-hidden'>{children}</div>
     </Shell>
   )
