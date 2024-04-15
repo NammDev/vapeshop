@@ -11,8 +11,8 @@ import {
   CardTitle,
 } from '@/components/ui/card'
 // import { OAuthSignIn } from '@/app/(auth)/_components/oauth-signin'
-// import { SignInForm } from '@/app/(auth)/_components/signin-form'
 import { Shell } from '@/components/app-ui/shell'
+import { SignInForm } from '../_componnents/signin-form'
 
 export const metadata: Metadata = {
   //   metadataBase: new URL(env.NEXT_PUBLIC_APP_URL),
@@ -38,7 +38,7 @@ export default function SignInPage() {
               <span className='bg-background px-2 text-muted-foreground'>Or continue with</span>
             </div>
           </div>
-          {/* <SignInForm /> */}
+          <SignInForm />
         </CardContent>
         <CardFooter className='flex flex-wrap items-center justify-between gap-2'>
           <div className='text-sm text-muted-foreground'>
