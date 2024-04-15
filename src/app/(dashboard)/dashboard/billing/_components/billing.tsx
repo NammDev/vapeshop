@@ -14,7 +14,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card'
-import { UsageCard } from '@/assets/cards/usage-card'
+import { UsageCard } from '@/components/cards/usage-card'
 // import { ManageSubscriptionForm } from '@/components/manage-subscription-form'
 
 interface BillingProps {

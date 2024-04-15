@@ -12,8 +12,9 @@ import {
 } from '@/components/app-ui/page-header'
 import { Shell } from '@/components/app-ui/shell'
 import { StoreCardSkeleton } from '@/components/skeletons/store-card-skeleton'
+import { AddStoreDialog } from './_components/add-store-dialog'
+import { getCacheduser } from '@/lib/actions/user'
 
-// import { AddStoreDialog } from './_components/add-store-dialog'
 // import { Stores } from './_components/stores'
 
 export const metadata: Metadata = {
@@ -23,11 +24,11 @@ export const metadata: Metadata = {
 }
 
 export default async function StoresPage() {
-  //   const user = await getCacheduser()
+  const user = await getCacheduser()
 
-  //   if (!user) {
-  //     redirect('/signin')
-  //   }
+  if (!user) {
+    redirect('/signin')
+  }
 
   //   const storesPromise = getStoresByUserId({ userId: user.id })
   //   const progressPromise = getProgress({ userId: user.id })
@@ -39,7 +40,10 @@ export default async function StoresPage() {
           <PageHeaderHeading size='sm' className='flex-1'>
             Stores
           </PageHeaderHeading>
-          {/* <AddStoreDialog userId={user.id} progressPromise={progressPromise} /> */}
+          <AddStoreDialog
+            userId={user.id}
+            //  progressPromise={progressPromise}
+          />
         </div>
         <PageHeaderDescription size='sm'>Manage your stores</PageHeaderDescription>
       </PageHeader>
