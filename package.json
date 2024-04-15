@@ -17,6 +17,7 @@
   },
   "dependencies": {
     "@clerk/nextjs": "^4.29.12",
+    "@clerk/themes": "^1.7.12",
     "@hookform/resolvers": "^3.3.4",
     "@radix-ui/react-accordion": "^1.1.2",
     "@radix-ui/react-aspect-ratio": "^1.0.3",
