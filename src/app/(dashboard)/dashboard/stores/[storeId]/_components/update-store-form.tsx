@@ -20,6 +20,17 @@ import React, { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 import { z } from 'zod'
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from '@/components/ui/alert-dialog'
 
 type UpdateStoreInputs = z.infer<typeof updateStoreSchema>
 
@@ -118,10 +129,40 @@ export function UpdateStoreForm({
             {loading && <Icons.spinner className='mr-2 size-4 animate-spin' aria-hidden='true' />}
             Update store
           </Button>
-          <Button type='button' onClick={onDelete} variant='destructive' disabled={del}>
-            {del && <Icons.spinner className='mr-2 size-4 animate-spin' aria-hidden='true' />}
-            Delete store
-          </Button>
+
+          <AlertDialog>
+            <AlertDialogTrigger asChild>
+              <Button variant='destructive' disabled={del}>
+                Delete store
+              </Button>
+            </AlertDialogTrigger>
+            <AlertDialogContent>
+              <AlertDialogHeader>
+                <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                <AlertDialogDescription>
+                  This action cannot be undone. This will permanently delete your account and remove
+                  your data from our servers.
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+                <AlertDialogCancel>Cancel</AlertDialogCancel>
+                <AlertDialogAction asChild>
+                  <Button
+                    className='bg-destructive text-destructive-foreground shadow-sm hover:bg-destructive/90'
+                    type='button'
+                    onClick={onDelete}
+                    variant='destructive'
+                    disabled={del}
+                  >
+                    {del && (
+                      <Icons.spinner className='mr-2 size-4 animate-spin' aria-hidden='true' />
+                    )}
+                    Delete Anyway
+                  </Button>
+                </AlertDialogAction>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
         </div>
       </form>
     </Form>
