@@ -52,7 +52,8 @@ export function SignInForm() {
       if (result.status === 'complete') {
         await setActive({ session: result.createdSessionId })
 
-        router.push(`${window.location.origin}/`)
+        // router.push(`${window.location.origin}/`)
+        window.location.href = `${window.location.origin}/`
       } else {
         /*Investigate why the login hasn't completed */
         console.log(result)
