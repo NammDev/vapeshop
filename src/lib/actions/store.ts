@@ -7,7 +7,7 @@ import {
   revalidateTag,
 } from 'next/cache'
 import { db } from '@/db'
-// import { products, stores, type Store } from '@/db/schema'
+import { stores, type Store } from '@/db/schema'
 import type { SearchParams } from '@/types'
 import { and, asc, count, desc, eq, isNull, not, sql } from 'drizzle-orm'
 import { type z } from 'zod'
@@ -159,46 +159,41 @@ import { type addStoreSchema } from '@/lib/validations/store'
 
 export async function addStore(input: z.infer<typeof addStoreSchema> & { userId: string }) {
   noStore()
-  const newStore = {}
-  return {
-    data: newStore,
-    error: null,
+  try {
+    const storeWithSameName = await db.query.stores.findFirst({
+      where: eq(stores.name, input.name),
+    })
+
+    if (storeWithSameName) {
+      throw new Error('Store name already taken.')
+    }
+
+    const newStore = await db
+      .insert(stores)
+      .values({
+        name: input.name,
+        description: input.description,
+        userId: input.userId,
+        slug: slugify(input.name),
+      })
+      .returning({
+        id: stores.id,
+        slug: stores.slug,
+      })
+      .then((res) => res[0])
+
+    revalidateTag(`stores-${input.userId}`)
+
+    return {
+      data: newStore,
+      error: null,
+    }
+  } catch (err) {
+    return {
+      data: null,
+      error: getErrorMessage(err),
+    }
   }
-  //   try {
-  //     const storeWithSameName = await db.query.stores.findFirst({
-  //       where: eq(stores.name, input.name),
-  //     })
-
-  //     if (storeWithSameName) {
-  //       throw new Error('Store name already taken.')
-  //     }
-
-  //     const newStore = await db
-  //       .insert(stores)
-  //       .values({
-  //         name: input.name,
-  //         description: input.description,
-  //         userId: input.userId,
-  //         slug: slugify(input.name),
-  //       })
-  //       .returning({
-  //         id: stores.id,
-  //         slug: stores.slug,
-  //       })
-  //       .then((res) => res[0])
-
-  //     revalidateTag(`stores-${input.userId}`)
-
-  //     return {
-  //       data: newStore,
-  //       error: null,
-  //     }
-  //   } catch (err) {
-  //     return {
-  //       data: null,
-  //       error: getErrorMessage(err),
-  //     }
-  //   }
 }
 
 // export async function updateStore(storeId: string, fd: FormData) {

@@ -96,8 +96,7 @@ export function AddStoreDialog({
       const { data: store, error } = await addStore({ ...data, userId })
 
       if (store) {
-        // router.push(`/dashboard/stores/${store.id}`)
-        router.push(`/dashboard/stores`)
+        router.push(`/dashboard/stores/${store.id}`)
         toast.success('Store created')
         return
       }
