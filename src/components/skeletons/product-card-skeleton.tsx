@@ -2,7 +2,7 @@ import { cn } from '@/lib/utils'
 import { AspectRatio } from '@/components/ui/aspect-ratio'
 import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card'
 import { Skeleton } from '@/components/ui/skeleton'
-// import { PlaceholderImage } from '@/components/placeholder-image'
+import { PlaceholderImage } from '../app-ui/placeholder-image'
 
 interface ProductCardSkeletonProps extends React.ComponentPropsWithoutRef<typeof Card> {}
 
@@ -11,7 +11,7 @@ export function ProductCardSkeleton({ className, ...props }: ProductCardSkeleton
     <Card className={cn('h-full overflow-hidden rounded-sm', className)} {...props}>
       <CardHeader className='border-b p-0'>
         <AspectRatio ratio={4 / 3}>
-          {/* <PlaceholderImage className='rounded-none' isSkeleton asChild /> */}
+          <PlaceholderImage className='rounded-none' isSkeleton asChild />
         </AspectRatio>
       </CardHeader>
       <CardContent className='space-y-2.5 p-4'>

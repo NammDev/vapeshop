@@ -2,7 +2,7 @@ import Link from 'next/link'
 
 import { Button } from '@/components/ui/button'
 import { Skeleton } from '@/components/ui/skeleton'
-// import { ContentSection } from '@/components/content-section'
+import { ContentSection } from '@/components/app-ui/content-section'
 import { ProductCardSkeleton } from '@/components/skeletons/product-card-skeleton'
 import { StoreCardSkeleton } from '@/components/skeletons/store-card-skeleton'
 
@@ -42,7 +42,7 @@ export function LobbySkeleton() {
           <CategoryCardSkeleton key={i} />
         ))}
       </section>
-      {/* <ContentSection
+      <ContentSection
         title='Featured products'
         description='Explore products from around the world'
         href='/products'
@@ -63,7 +63,7 @@ export function LobbySkeleton() {
         {Array.from({ length: 4 }).map((_, i) => (
           <StoreCardSkeleton key={i} />
         ))}
-      </ContentSection> */}
+      </ContentSection>
     </Shell>
   )
 }

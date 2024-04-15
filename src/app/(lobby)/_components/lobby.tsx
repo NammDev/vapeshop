@@ -37,6 +37,8 @@ export async function Lobby() {
   //     storesPromise,
   //   ])
 
+  // await new Promise((resolve) => setTimeout(resolve, 5000))
+
   return (
     <Shell className='max-w-6xl'>
       <section className='mx-auto flex w-full max-w-5xl flex-col items-center justify-center gap-4 py-24 text-center md:py-32'>
