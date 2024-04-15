@@ -7,7 +7,7 @@ import {
   PageHeaderHeading,
 } from '@/components/app-ui/page-header'
 import { Shell } from '@/components/app-ui/shell'
-import { LogOutButtons } from '../_componnents/logout.buttons'
+import { LogOutButtons } from '../_componnents/logout-buttons'
 
 export const metadata: Metadata = {
   //   metadataBase: new URL(env.NEXT_PUBLIC_APP_URL),

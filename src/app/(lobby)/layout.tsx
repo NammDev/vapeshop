@@ -6,7 +6,6 @@ import { SiteHeader } from '@/components/layouts/site-header'
 
 export default async function LobyLayout({ children }: PropsWithChildren) {
   const user = await currentUser()
-  console.log(user)
 
   return (
     <div className='relative flex min-h-screen flex-col'>
