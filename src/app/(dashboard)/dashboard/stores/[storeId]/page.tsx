@@ -1,5 +1,4 @@
 import { type Metadata } from 'next'
-import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { db } from '@/db'
 import { stores } from '@/db/schema'
@@ -8,8 +7,6 @@ import { eq } from 'drizzle-orm'
 
 import { deleteStore, updateStore } from '@/lib/actions/store'
 // import { getStripeAccount } from '@/lib/actions/stripe'
-import { cn, formatDate } from '@/lib/utils'
-import { buttonVariants } from '@/components/ui/button'
 import {
   Card,
   CardContent,
@@ -18,11 +15,8 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
-import { Textarea } from '@/components/ui/textarea'
 import { ConnectStoreToStripeButton } from '@/components/app-ui/store-stripe-button'
-import { LoadingButton } from '@/components/app-ui/loading-button'
+import { UpdateStoreForm } from './_components/update-store-form'
 
 interface UpdateStorePageProps {
   params: {
@@ -156,47 +150,7 @@ export default async function UpdateStorePage({ params }: UpdateStorePageProps) 
           <CardDescription>Update your store name and description, or delete it</CardDescription>
         </CardHeader>
         <CardContent>
-          <form action={updateStore.bind(null, store.id)} className='grid w-full max-w-xl gap-5'>
-            <div className='grid gap-2.5'>
-              <Label htmlFor='update-store-name'>Name</Label>
-              <Input
-                id='update-store-name'
-                aria-describedby='update-store-name-description'
-                name='name'
-                required
-                minLength={3}
-                maxLength={50}
-                placeholder='Type store name here.'
-                defaultValue={store.name}
-              />
-            </div>
-            <div className='grid gap-2.5'>
-              <Label htmlFor='update-store-description'>Description</Label>
-              <Textarea
-                id='update-store-description'
-                aria-describedby='update-store-description-description'
-                name='description'
-                minLength={3}
-                maxLength={255}
-                placeholder='Type store description here.'
-                defaultValue={store.description ?? ''}
-              />
-            </div>
-            <div className='flex flex-col gap-2 xs:flex-row'>
-              <LoadingButton action='update'>
-                Update store
-                <span className='sr-only'>Update store</span>
-              </LoadingButton>
-              <LoadingButton
-                formAction={deleteStore.bind(null, store.id)}
-                variant='destructive'
-                action='delete'
-              >
-                Delete store
-                <span className='sr-only'>Delete store</span>
-              </LoadingButton>
-            </div>
-          </form>
+          <UpdateStoreForm store={store} />
         </CardContent>
       </Card>
     </div>

@@ -200,14 +200,9 @@ export async function addStore(input: z.infer<typeof addStoreSchema> & { userId:
   }
 }
 
-export async function updateStore(storeId: string, fd: FormData) {
+export async function updateStore(input: z.infer<typeof updateStoreSchema>, storeId: string) {
   noStore()
   try {
-    const input = updateStoreSchema.parse({
-      name: fd.get('name'),
-      description: fd.get('description'),
-    })
-
     const storeWithSameName = await db.query.stores.findFirst({
       where: and(eq(stores.name, input.name), not(eq(stores.id, storeId))),
       columns: {
@@ -219,19 +214,24 @@ export async function updateStore(storeId: string, fd: FormData) {
       throw new Error('Store name already taken')
     }
 
-    await db
+    const updateStore = await db
       .update(stores)
       .set({
         name: input.name,
         description: input.description,
       })
       .where(eq(stores.id, storeId))
+      .returning({
+        id: stores.id,
+        slug: stores.slug,
+      })
+      .then((res) => res[0])
 
     revalidateTag('user-stores')
     revalidatePath(`/dashboard/stores/${storeId}`)
 
     return {
-      data: null,
+      data: updateStore,
       error: null,
     }
   } catch (err) {
@@ -265,7 +265,7 @@ export async function deleteStore(storeId: string) {
     revalidatePath(path)
 
     return {
-      data: null,
+      data: { success: true },
       error: null,
     }
   } catch (err) {
