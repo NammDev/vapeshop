@@ -7,7 +7,7 @@ export default authMiddleware({
   publicRoutes: [
     '/',
     '/signin(.*)',
-    // '/signup(.*)',
+    '/signup(.*)',
     // '/sso-callback(.*)',
     // '/collections(.*)',
     // '/product(.*)',

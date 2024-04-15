@@ -15,14 +15,14 @@ export const authSchema = z.object({
     }),
 })
 
-// export const verifyEmailSchema = z.object({
-//   code: z
-//     .string()
-//     .min(6, {
-//       message: 'Verification code must be 6 characters long',
-//     })
-//     .max(6),
-// })
+export const verifyEmailSchema = z.object({
+  code: z
+    .string()
+    .min(6, {
+      message: 'Verification code must be 6 characters long',
+    })
+    .max(6),
+})
 
 // export const checkEmailSchema = z.object({
 //   email: authSchema.shape.email,
