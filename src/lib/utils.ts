@@ -25,3 +25,12 @@ export function getUserEmail(user: User | null) {
 
   return email
 }
+
+export function formatDate(date: Date | string | number, options: Intl.DateTimeFormatOptions = {}) {
+  return new Intl.DateTimeFormat('en-US', {
+    month: options.month ?? 'long',
+    day: options.day ?? 'numeric',
+    year: options.year ?? 'numeric',
+    ...options,
+  }).format(new Date(date))
+}
