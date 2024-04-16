@@ -16,7 +16,7 @@ import {
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { Separator } from '@/components/ui/separator'
 import { ProductCard } from '@/components/cards/product-card'
-// import { AddToCartForm } from '@/components/forms/add-to-cart-form'
+import { AddToCartForm } from '@/components/forms/add-to-cart-form'
 import { ProductImageCarousel } from '@/components/app-ui/product-image-carousel'
 import { Rating } from '@/components/app-ui/rating'
 import { Shell } from '@/components/app-ui/shell'
@@ -131,7 +131,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
             <Rating rating={Math.round(product.rating / 5)} />
             <UpdateProductRatingButton productId={product.id} rating={product.rating} />
           </div>
-          {/* <AddToCartForm productId={productId} showBuyNow={true} /> */}
+          <AddToCartForm productId={productId} showBuyNow={true} />
           <Separator className='mt-5' />
           <Accordion type='single' collapsible className='w-full' defaultValue='description'>
             <AccordionItem value='description' className='border-none'>

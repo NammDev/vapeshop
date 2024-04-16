@@ -8,7 +8,7 @@ import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 import type { z } from 'zod'
 
-import { addToCart } from '@/lib/actions/cart'
+// import { addToCart } from '@/lib/actions/cart'
 import { showErrorToast } from '@/lib/handle-error'
 import { cn } from '@/lib/utils'
 import { updateCartItemSchema } from '@/lib/validations/cart'
@@ -22,7 +22,7 @@ import {
   FormMessage,
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
-import { Icons } from '@/components/icons'
+import { Icons } from '@/components/app-ui/icons'
 
 interface AddToCartFormProps {
   productId: string
@@ -47,15 +47,15 @@ export function AddToCartForm({ productId, showBuyNow }: AddToCartFormProps) {
 
   async function onSubmit(data: Inputs) {
     setIsAddingToCart(true)
-    const { error } = await addToCart({
-      productId,
-      quantity: data.quantity,
-    })
+    // const { error } = await addToCart({
+    //   productId,
+    //   quantity: data.quantity,
+    // })
 
-    if (error) {
-      showErrorToast(error)
-      return
-    }
+    // if (error) {
+    //   showErrorToast(error)
+    //   return
+    // }
 
     toast.success('Product added to cart')
 
@@ -129,15 +129,15 @@ export function AddToCartForm({ productId, showBuyNow }: AddToCartFormProps) {
               onClick={async () => {
                 setIsBuyingNow(true)
 
-                const { error } = await addToCart({
-                  productId,
-                  quantity: form.getValues('quantity'),
-                })
+                // const { error } = await addToCart({
+                //   productId,
+                //   quantity: form.getValues('quantity'),
+                // })
 
-                if (error) {
-                  showErrorToast(error)
-                  return
-                }
+                // if (error) {
+                //   showErrorToast(error)
+                //   return
+                // }
 
                 router.push('/cart')
                 setIsBuyingNow(false)
