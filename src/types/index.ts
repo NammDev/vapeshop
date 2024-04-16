@@ -56,11 +56,11 @@ export interface SearchParams {
 
 // export interface UploadedFile<T = unknown> extends ClientUploadedFileData<T> {}
 
-// export interface StoredFile {
-//   id: string
-//   name: string
-//   url: string
-// }
+export interface StoredFile {
+  id: string
+  name: string
+  url: string
+}
 
 // export interface DataTableFilterField<TData> {
 //   label: string

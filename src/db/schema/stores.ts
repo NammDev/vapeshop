@@ -5,7 +5,7 @@ import { boolean, text, timestamp, varchar } from 'drizzle-orm/pg-core'
 import { generateId } from '@/lib/utils'
 
 // import { payments } from './payments'
-// import { products } from './products'
+import { products } from './products'
 
 export const stores = pgTable('stores', {
   id: varchar('id', { length: 30 })
@@ -21,10 +21,10 @@ export const stores = pgTable('stores', {
   updatedAt: timestamp('updated_at').default(sql`current_timestamp`),
 })
 
-// export const storesRelations = relations(stores, ({ many }) => ({
-//   products: many(products),
-//   payments: many(payments),
-// }))
+export const storesRelations = relations(stores, ({ many }) => ({
+  products: many(products),
+  // payments: many(payments),
+}))
 
 export type Store = typeof stores.$inferSelect
 export type NewStore = typeof stores.$inferInsert

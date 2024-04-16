@@ -1,5 +1,5 @@
 export * from './stores'
-// export * from './products'
+export * from './products'
 export * from './categories'
 export * from './subcategories'
 // export * from './carts'

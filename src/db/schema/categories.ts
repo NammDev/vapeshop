@@ -4,7 +4,7 @@ import { text, timestamp, varchar } from 'drizzle-orm/pg-core'
 
 import { generateId } from '@/lib/utils'
 
-// import { products } from './products'
+import { products } from './products'
 import { subcategories } from './subcategories'
 
 export const categories = pgTable('categories', {
@@ -19,7 +19,7 @@ export const categories = pgTable('categories', {
 })
 
 export const categoriesRelations = relations(categories, ({ many }) => ({
-  //   products: many(products),
+  products: many(products),
   subcategories: many(subcategories),
 }))
 
