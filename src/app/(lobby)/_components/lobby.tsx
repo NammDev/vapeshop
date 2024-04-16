@@ -11,32 +11,33 @@ import { ContentSection } from '@/components/app-ui/content-section'
 import { StoreCard } from '@/components/cards/store-card'
 import { getCategories } from '@/lib/actions/category'
 import { CategoryCard } from './category-card'
-
-// import { ProductCard } from '@/components/cards/product-card'
+import { getFeaturedProducts } from '@/lib/actions/product'
+import { ProductCard } from '@/components/cards/product-card'
 // import { StoreCard } from '@/components/cards/store-card'
 // import { ContentSection } from '@/components/content-section'
 
 interface LobbyProps {
   // githubStarsPromise: ReturnType<typeof getGithubStars>
-  // productsPromise: ReturnType<typeof getFeaturedProducts>
+  productsPromise: ReturnType<typeof getFeaturedProducts>
   categoriesPromise: ReturnType<typeof getCategories>
   storesPromise: ReturnType<typeof getFeaturedStores>
 }
 
 export async function Lobby({
   // githubStarsPromise,
-  // productsPromise,
+  productsPromise,
   categoriesPromise,
   storesPromise,
 }: LobbyProps) {
   // See the "Parallel data fetching" docs: https://nextjs.org/docs/app/building-your-application/data-fetching/patterns#parallel-data-fetching
   const [
+    products,
     categories,
     stores,
     // , products, , githubStars
   ] = await Promise.all([
     // githubStarsPromise,
-    // productsPromise,
+    productsPromise,
     categoriesPromise,
     storesPromise,
   ])
@@ -102,7 +103,7 @@ export async function Lobby({
           <CategoryCard key={category.name} category={category} />
         ))}
       </section>
-      {/* <ContentSection
+      <ContentSection
         title='Featured products'
         description='Explore products from around the world'
         href='/products'
@@ -112,7 +113,7 @@ export async function Lobby({
         {products.map((product) => (
           <ProductCard key={product.id} product={product} />
         ))}
-      </ContentSection> */}
+      </ContentSection>
       <ContentSection
         title='Featured stores'
         description='Explore stores from around the world'

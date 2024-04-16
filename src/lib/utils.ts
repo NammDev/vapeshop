@@ -34,3 +34,12 @@ export function formatDate(date: Date | string | number, options: Intl.DateTimeF
     ...options,
   }).format(new Date(date))
 }
+
+export function formatPrice(price: number | string, options: Intl.NumberFormatOptions = {}) {
+  return new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: options.currency ?? 'USD',
+    notation: options.notation ?? 'compact',
+    ...options,
+  }).format(Number(price))
+}
