@@ -6,7 +6,9 @@ import { type Product, type Store } from '@/db/schema'
 import type { Option } from '@/types'
 import { ChevronDownIcon, ChevronLeftIcon, ChevronRightIcon } from '@radix-ui/react-icons'
 
-import { getSubcategories, sortOptions } from '@/config/products'
+import { queryConfig } from '@/config/query'
+import { type getCategories } from '@/lib/actions/category'
+import { type getSubcategoriesByCategory } from '@/lib/actions/sub-category'
 import { cn, toTitleCase, truncate } from '@/lib/utils'
 import { useDebounce } from '@/hooks/use-debounce'
 import { Button } from '@/components/ui/button'
@@ -35,14 +37,15 @@ import {
 import { Slider } from '@/components/ui/slider'
 import { Switch } from '@/components/ui/switch'
 import { ProductCard } from '@/components/cards/product-card'
-import { MultiSelect } from '@/components/multi-select'
-import { PaginationButton } from '@/components/pagers/pagination-button'
+import { MultiSelect } from '@/components/app-ui/multi-select'
+import { PaginationButton } from '@/components/app-ui/pagination-button'
 
 interface ProductsProps {
   products: Product[]
   pageCount: number
-  category?: Product['category']
-  categories?: Product['category'][]
+  categories?: string[]
+  category?: Awaited<ReturnType<typeof getCategories>>[number]
+  subcategories?: Awaited<ReturnType<typeof getSubcategoriesByCategory>>
   stores?: Pick<Store & { productCount: number }, 'id' | 'name' | 'productCount'>[]
   storePageCount?: number
 }
@@ -52,6 +55,7 @@ export function Products({
   pageCount,
   category,
   categories,
+  subcategories,
   stores,
   storePageCount,
 }: ProductsProps) {
@@ -142,7 +146,6 @@ export function Products({
         }))
       : null
   )
-  const subcategories = getSubcategories(category)
 
   React.useEffect(() => {
     startTransition(() => {
@@ -160,8 +163,8 @@ export function Products({
   }, [selectedSubcategories])
 
   // Store filter
-  const [storeIds, setStoreIds] = React.useState<number[] | null>(
-    store_ids ? store_ids?.split('.').map(Number) : null
+  const [storeIds, setStoreIds] = React.useState<string[] | null>(
+    store_ids ? store_ids?.split('.') : null
   )
 
   React.useEffect(() => {
@@ -279,7 +282,12 @@ export function Products({
                     placeholder='Select subcategories'
                     selected={selectedSubcategories}
                     setSelected={setSelectedSubcategories}
-                    options={subcategories}
+                    options={
+                      subcategories?.map((c) => ({
+                        label: c.name,
+                        value: c.id,
+                      })) ?? []
+                    }
                   />
                 </Card>
               ) : null}
@@ -293,7 +301,7 @@ export function Products({
                       <Button
                         variant='ghost'
                         size='icon'
-                        className='h-8 w-8'
+                        className='size-8'
                         onClick={() => {
                           startTransition(() => {
                             router.push(
@@ -308,13 +316,13 @@ export function Products({
                         }}
                         disabled={Number(store_page) === 1 || isPending}
                       >
-                        <ChevronLeftIcon className='h-4 w-4' aria-hidden='true' />
+                        <ChevronLeftIcon className='size-4' aria-hidden='true' />
                         <span className='sr-only'>Previous store page</span>
                       </Button>
                       <Button
                         variant='ghost'
                         size='icon'
-                        className='h-8 w-8'
+                        className='size-8'
                         onClick={() => {
                           startTransition(() => {
                             router.push(
@@ -329,7 +337,7 @@ export function Products({
                         }}
                         disabled={Number(store_page) === storePageCount || isPending}
                       >
-                        <ChevronRightIcon className='h-4 w-4' aria-hidden='true' />
+                        <ChevronRightIcon className='size-4' aria-hidden='true' />
                         <span className='sr-only'>Next store page</span>
                       </Button>
                     </div>
@@ -402,13 +410,13 @@ export function Products({
           <DropdownMenuTrigger asChild>
             <Button aria-label='Sort products' size='sm' disabled={isPending}>
               Sort
-              <ChevronDownIcon className='ml-2 h-4 w-4' aria-hidden='true' />
+              <ChevronDownIcon className='ml-2 size-4' aria-hidden='true' />
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align='start' className='w-48'>
             <DropdownMenuLabel>Sort by</DropdownMenuLabel>
             <DropdownMenuSeparator />
-            {sortOptions.map((option) => (
+            {queryConfig.product.sortOptions.map((option) => (
               <DropdownMenuItem
                 key={option.label}
                 className={cn(option.value === sort && 'bg-accent font-bold')}
@@ -440,9 +448,9 @@ export function Products({
         </div>
       ) : null}
       <div className='grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'>
-        {products.map((product) => (
+        {/* {products.map((product) => (
           <ProductCard key={product.id} product={product} />
-        ))}
+        ))} */}
       </div>
       {products.length ? (
         <PaginationButton
