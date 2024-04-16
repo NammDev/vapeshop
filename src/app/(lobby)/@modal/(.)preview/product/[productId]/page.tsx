@@ -13,7 +13,7 @@ import { AspectRatio } from '@/components/ui/aspect-ratio'
 import { buttonVariants } from '@/components/ui/button'
 import { DialogShell } from '@/components/app-ui/dialog-shell'
 import { PlaceholderImage } from '@/components/app-ui/placeholder-image'
-// import { Rating } from '@/components/rating'
+import { Rating } from '@/components/app-ui/rating'
 
 interface ProductModalPageProps {
   params: {
@@ -80,7 +80,7 @@ export default async function ProductModalPage({ params }: ProductModalPageProps
         <div className='space-y-2'>
           <h1 className='line-clamp-2 text-2xl font-bold'>{product.name}</h1>
           <p className='text-base text-muted-foreground'>{formatPrice(product.price)}</p>
-          {/* <Rating rating={Math.round(product.rating / 5)} /> */}
+          <Rating rating={Math.round(product.rating / 5)} />
           <p className='text-base text-muted-foreground'>{product.inventory} in stock</p>
         </div>
         <p className='line-clamp-4 text-base text-muted-foreground'>{product.description}</p>
