@@ -6,15 +6,14 @@ import { categories, products, stores, subcategories, type Product } from '@/db/
 import type { SearchParams, StoredFile } from '@/types'
 import { and, asc, count, desc, eq, gte, inArray, lte, sql } from 'drizzle-orm'
 import { type z } from 'zod'
-import { getProductSchema, getProductsSchema } from '@/lib/validations/product'
 
 import { getErrorMessage } from '@/lib/handle-error'
-// import {
-//   getProductsSchema,
-//   type AddProductSchema,
-//   type addProductSchema,
-//   type updateProductRatingSchema,
-// } from '@/lib/validations/product'
+import {
+  getProductsSchema,
+  type AddProductSchema,
+  type addProductSchema,
+  type updateProductRatingSchema,
+} from '@/lib/validations/product'
 
 // See the unstable_cache API docs: https://nextjs.org/docs/app/api-reference/functions/unstable_cache
 export async function getFeaturedProducts() {
