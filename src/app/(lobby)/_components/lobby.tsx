@@ -5,7 +5,7 @@ import { Shell } from '@/components/app-ui/shell'
 import { Badge } from '@/components/ui/badge'
 import { Icons } from '@/components/app-ui/icons'
 import { Button } from '@/components/ui/button'
-// import { type getGithubStars } from '@/lib/actions/github'
+import { type getGithubStars } from '@/lib/actions/github'
 import { type getFeaturedStores } from '@/lib/actions/store'
 import { ContentSection } from '@/components/app-ui/content-section'
 import { StoreCard } from '@/components/cards/store-card'
@@ -13,30 +13,23 @@ import { getCategories } from '@/lib/actions/category'
 import { CategoryCard } from './category-card'
 import { getFeaturedProducts } from '@/lib/actions/product'
 import { ProductCard } from '@/components/cards/product-card'
-// import { StoreCard } from '@/components/cards/store-card'
-// import { ContentSection } from '@/components/content-section'
 
 interface LobbyProps {
-  // githubStarsPromise: ReturnType<typeof getGithubStars>
+  githubStarsPromise: ReturnType<typeof getGithubStars>
   productsPromise: ReturnType<typeof getFeaturedProducts>
   categoriesPromise: ReturnType<typeof getCategories>
   storesPromise: ReturnType<typeof getFeaturedStores>
 }
 
 export async function Lobby({
-  // githubStarsPromise,
+  githubStarsPromise,
   productsPromise,
   categoriesPromise,
   storesPromise,
 }: LobbyProps) {
   // See the "Parallel data fetching" docs: https://nextjs.org/docs/app/building-your-application/data-fetching/patterns#parallel-data-fetching
-  const [
-    products,
-    categories,
-    stores,
-    // , products, , githubStars
-  ] = await Promise.all([
-    // githubStarsPromise,
+  const [githubStars, products, categories, stores] = await Promise.all([
+    githubStarsPromise,
     productsPromise,
     categoriesPromise,
     storesPromise,
@@ -58,8 +51,7 @@ export async function Lobby({
           <Link href={siteConfig.links.github} target='_blank' rel='noreferrer'>
             <Badge aria-hidden='true' className='rounded-full px-3.5 py-1.5' variant='secondary'>
               <Icons.gitHub className='mr-2 size-3.5' aria-hidden='true' />
-              {/* {githubStars} stars on GitHub */}
-              4729 stars on GitHub
+              {githubStars} stars on GitHub
             </Badge>
             <span className='sr-only'>GitHub</span>
           </Link>

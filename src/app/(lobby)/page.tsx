@@ -5,6 +5,7 @@ import { LobbySkeleton } from './_components/lobby-skeleton'
 import { getFeaturedStores } from '@/lib/actions/store'
 import { getCategories } from '@/lib/actions/category'
 import { getFeaturedProducts } from '@/lib/actions/product'
+import { getGithubStars } from '@/lib/actions/github'
 
 export default function IndexPage() {
   /**
@@ -13,7 +14,7 @@ export default function IndexPage() {
    * @see https://www.youtube.com/shorts/A7GGjutZxrs
    * @see https://nextjs.org/docs/app/building-your-application/data-fetching/patterns#parallel-data-fetching
    */
-  // const githubStarsPromise = getGithubStars()
+  const githubStarsPromise = getGithubStars()
   const productsPromise = getFeaturedProducts()
   const categoriesPromise = getCategories()
   const storesPromise = getFeaturedStores()
@@ -21,7 +22,7 @@ export default function IndexPage() {
   return (
     <React.Suspense fallback={<LobbySkeleton />}>
       <Lobby
-        // githubStarsPromise={githubStarsPromise}
+        githubStarsPromise={githubStarsPromise}
         productsPromise={productsPromise}
         categoriesPromise={categoriesPromise}
         storesPromise={storesPromise}
