@@ -9,6 +9,7 @@ import {
 } from '@/components/app-ui/page-header'
 import { Shell } from '@/components/app-ui/shell'
 import { getStores } from '@/lib/actions/store'
+import { Products } from '@/components/app-logic/products'
 
 export const metadata: Metadata = {
   // metadataBase: new URL(env.NEXT_PUBLIC_APP_URL),
@@ -32,6 +33,13 @@ export default async function ProductsPage({ searchParams }: ProductsPageProps) 
         <PageHeaderHeading size='sm'>Products</PageHeaderHeading>
         <PageHeaderDescription size='sm'>Buy products from our stores</PageHeaderDescription>
       </PageHeader>
+      <Products
+        products={productData}
+        pageCount={productPageCount}
+        // categories={Object.values(products.category.enumValues)}
+        stores={storeData}
+        storePageCount={storePageCount}
+      />
     </Shell>
   )
 }

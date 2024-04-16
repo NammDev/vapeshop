@@ -39,9 +39,10 @@ import { Switch } from '@/components/ui/switch'
 import { ProductCard } from '@/components/cards/product-card'
 import { MultiSelect } from '@/components/app-ui/multi-select'
 import { PaginationButton } from '@/components/app-ui/pagination-button'
+import { getProducts } from '@/lib/actions/product'
 
 interface ProductsProps {
-  products: Product[]
+  products: Awaited<ReturnType<typeof getProducts>>['data']
   pageCount: number
   categories?: string[]
   category?: Awaited<ReturnType<typeof getCategories>>[number]
