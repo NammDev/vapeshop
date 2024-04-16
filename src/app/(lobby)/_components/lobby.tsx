@@ -6,38 +6,40 @@ import { Badge } from '@/components/ui/badge'
 import { Icons } from '@/components/app-ui/icons'
 import { Button } from '@/components/ui/button'
 // import { type getGithubStars } from '@/lib/actions/github'
-// import type { getCategories, getFeaturedProducts } from '@/lib/actions/product'
-// import { type getFeaturedStores } from '@/lib/actions/store'
+import { type getFeaturedStores } from '@/lib/actions/store'
+import { ContentSection } from '@/components/app-ui/content-section'
+import { StoreCard } from '@/components/cards/store-card'
+import { getCategories } from '@/lib/actions/category'
+import { CategoryCard } from './category-card'
 
 // import { ProductCard } from '@/components/cards/product-card'
 // import { StoreCard } from '@/components/cards/store-card'
 // import { ContentSection } from '@/components/content-section'
 
-// import { CategoryCard } from './category-card'
+interface LobbyProps {
+  // githubStarsPromise: ReturnType<typeof getGithubStars>
+  // productsPromise: ReturnType<typeof getFeaturedProducts>
+  categoriesPromise: ReturnType<typeof getCategories>
+  storesPromise: ReturnType<typeof getFeaturedStores>
+}
 
-// interface LobbyProps {
-//   githubStarsPromise: ReturnType<typeof getGithubStars>
-//   productsPromise: ReturnType<typeof getFeaturedProducts>
-//   categoriesPromise: ReturnType<typeof getCategories>
-//   storesPromise: ReturnType<typeof getFeaturedStores>
-// }
-
-export async function Lobby() {
-  //     {
-  //   githubStarsPromise,
-  //   productsPromise,
-  //   categoriesPromise,
-  //   storesPromise,
-  // }: LobbyProps
+export async function Lobby({
+  // githubStarsPromise,
+  // productsPromise,
+  categoriesPromise,
+  storesPromise,
+}: LobbyProps) {
   // See the "Parallel data fetching" docs: https://nextjs.org/docs/app/building-your-application/data-fetching/patterns#parallel-data-fetching
-  //   const [githubStars, products, categories, stores] = await Promise.all([
-  //     githubStarsPromise,
-  //     productsPromise,
-  //     categoriesPromise,
-  //     storesPromise,
-  //   ])
-
-  // await new Promise((resolve) => setTimeout(resolve, 5000))
+  const [
+    categories,
+    stores,
+    // , products, , githubStars
+  ] = await Promise.all([
+    // githubStarsPromise,
+    // productsPromise,
+    categoriesPromise,
+    storesPromise,
+  ])
 
   return (
     <Shell className='max-w-6xl'>
@@ -96,9 +98,9 @@ export async function Lobby() {
         className='grid animate-fade-up grid-cols-1 gap-4 xs:grid-cols-2 md:grid-cols-4'
         style={{ animationDelay: '0.50s', animationFillMode: 'both' }}
       >
-        {/* {categories.map((category) => (
+        {categories.map((category) => (
           <CategoryCard key={category.name} category={category} />
-        ))} */}
+        ))}
       </section>
       {/* <ContentSection
         title='Featured products'
@@ -110,7 +112,7 @@ export async function Lobby() {
         {products.map((product) => (
           <ProductCard key={product.id} product={product} />
         ))}
-      </ContentSection>
+      </ContentSection> */}
       <ContentSection
         title='Featured stores'
         description='Explore stores from around the world'
@@ -121,7 +123,7 @@ export async function Lobby() {
         {stores.map((store) => (
           <StoreCard key={store.id} store={store} href={`/products?store_ids=${store.id}`} />
         ))}
-      </ContentSection> */}
+      </ContentSection>
     </Shell>
   )
 }
