@@ -23,15 +23,6 @@ interface StoresPageProps {
 }
 
 export default async function StoresPage({ searchParams }: StoresPageProps) {
-  const { page, per_page, sort, statuses } = storesSearchParamsSchema.parse(searchParams)
-
-  // Stores transaction
-  const pageAsNumber = Number(page)
-  const fallbackPage = isNaN(pageAsNumber) || pageAsNumber < 1 ? 1 : pageAsNumber
-  const perPageAsNumber = Number(per_page)
-  const limit = isNaN(perPageAsNumber) ? 10 : perPageAsNumber
-  const offset = fallbackPage > 0 ? (fallbackPage - 1) * limit : 0
-
   const { data, pageCount } = await getStores(searchParams)
 
   return (

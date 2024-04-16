@@ -1,15 +1,16 @@
 import { type Metadata } from 'next'
 // import { env } from '@/env.js'
 import type { SearchParams } from '@/types'
+import { unstable_noStore as noStore } from 'next/cache'
 
 import { getProducts } from '@/lib/actions/product'
-// import { AlertCard } from '@/components/alert-card'
 import {
   PageHeader,
   PageHeaderDescription,
   PageHeaderHeading,
 } from '@/components/app-ui/page-header'
 import { Shell } from '@/components/app-ui/shell'
+import { getStores } from '@/lib/actions/store'
 
 export const metadata: Metadata = {
   // metadataBase: new URL(env.NEXT_PUBLIC_APP_URL),
@@ -22,7 +23,10 @@ interface ProductsPageProps {
 }
 
 export default async function ProductsPage({ searchParams }: ProductsPageProps) {
-  const productsTransaction = await getProducts(searchParams)
+  const [
+    { data: productData, pageCount: productPageCount },
+    { data: storeData, pageCount: storePageCount },
+  ] = await Promise.all([getProducts(searchParams), getStores(searchParams)])
 
   return (
     <Shell>
