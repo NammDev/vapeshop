@@ -1,4 +1,4 @@
-import { seedCategories, seedSubcategories } from '@/lib/actions/seed'
+import { seedCategories, seedSubcategories } from '@/lib/actions/seedData'
 
 async function runSeed() {
   console.log('⏳ Running seed...')
