@@ -1,8 +1,6 @@
 import { type Metadata } from 'next'
 // import { env } from '@/env.js'
 import type { SearchParams } from '@/types'
-import { unstable_noStore as noStore } from 'next/cache'
-
 import { getProducts } from '@/lib/actions/product'
 import {
   PageHeader,
@@ -34,7 +32,6 @@ export default async function ProductsPage({ searchParams }: ProductsPageProps) 
         <PageHeaderHeading size='sm'>Products</PageHeaderHeading>
         <PageHeaderDescription size='sm'>Buy products from our stores</PageHeaderDescription>
       </PageHeader>
-      {/* <AlertCard /> */}
     </Shell>
   )
 }

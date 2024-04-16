@@ -101,7 +101,7 @@ export async function getProducts(input: SearchParams) {
             input.active === 'true' ? sql`(${stores.stripeAccountId}) is not null` : undefined
           )
         )
-        .groupBy(products.id)
+        .groupBy(products.id, stores.stripeAccountId, categories.name, subcategories.name)
         .orderBy(
           column && column in products
             ? order === 'asc'
@@ -137,6 +137,7 @@ export async function getProducts(input: SearchParams) {
 
     return transaction
   } catch (err) {
+    console.log(err)
     return {
       data: [],
       pageCount: 0,
