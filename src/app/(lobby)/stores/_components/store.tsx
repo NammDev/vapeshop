@@ -135,7 +135,7 @@ export function Stores({ data: stores, pageCount }: StoresProps) {
       ) : null}
       <div className='grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'>
         {stores.map((store) => (
-          <StoreCard key={store.id} href={`/store/${store.id}`} store={store} />
+          <StoreCard key={store.id} href={`/products?store_ids=${store.id}`} store={store} />
         ))}
       </div>
       {stores.length ? (
