@@ -29,7 +29,7 @@ export default async function ProductModalPage({ params }: ProductModalPageProps
       id: products.id,
       name: products.name,
       description: products.description,
-      images: sql<StoredFile[] | null>`${products.images}`,
+      images: products.images,
       category: categories.name,
       price: products.price,
       inventory: products.inventory,
