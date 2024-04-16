@@ -4,6 +4,7 @@ import rehypeCodeTitles from 'rehype-code-titles'
 import rehypePrettyCode from 'rehype-pretty-code'
 import rehypeSlug from 'rehype-slug'
 import { codeImport } from 'remark-code-import'
+import remarkGfm from 'remark-gfm'
 
 const computedFields: ComputedFields = {
   slug: {
@@ -108,7 +109,7 @@ export default makeSource({
   documentTypes: [Post, Author, Page],
   mdx: {
     // @ts-expect-error - codeImport types are not compatible with remark plugins
-    remarkPlugins: [codeImport],
+    remarkPlugins: [codeImport, remarkGfm],
     rehypePlugins: [
       [
         // @ts-expect-error - rehype-pretty-code types are not compatible with rehype plugins
