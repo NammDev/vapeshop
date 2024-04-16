@@ -156,3 +156,5 @@ export const productConfig = {
   ],
   tags: ['new', 'sale', 'bestseller', 'featured', 'popular', 'trending', 'limited', 'exclusive'],
 }
+
+export const productCategoriesConfig = productConfig.categories

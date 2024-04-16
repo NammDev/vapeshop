@@ -1,25 +1,27 @@
-import { type Metadata } from "next"
-import { cookies } from "next/headers"
-import Link from "next/link"
-import { env } from "@/env.js"
-import { CheckIcon, CircleIcon } from "@radix-ui/react-icons"
+import { type Metadata } from 'next'
+import { cookies } from 'next/headers'
+import Link from 'next/link'
+// import { env } from '@/env.mjs'
+import { CheckIcon, CircleIcon } from '@radix-ui/react-icons'
 
-import { getCartItems } from "@/lib/actions/cart"
-import { getProducts } from "@/lib/actions/product"
-import { cn } from "@/lib/utils"
-import { productsSearchParamsSchema } from "@/lib/validations/params"
-import { BoardBuilder } from "@/components/board-builder"
+import { productCategoriesConfig } from '@/config/product'
+// import { getCartItems } from '@/lib/fetchers/cart'
+import { getProducts } from '@/lib/actions/product'
+import { cn } from '@/lib/utils'
+import { productsSearchParamsSchema } from '@/lib/validations/params'
+// import { BoardBuilder } from '@/components/board-builder'
 import {
   PageHeader,
   PageHeaderDescription,
   PageHeaderHeading,
-} from "@/components/page-header"
-import { Shell } from "@/components/shell"
+} from '@/components/app-ui/page-header'
+import { Shell } from '@/components/app-ui/shell'
+import { BoardBuilder } from './board-builder'
 
 export const metadata: Metadata = {
-  metadataBase: new URL(env.NEXT_PUBLIC_APP_URL),
-  title: "Build a Board",
-  description: "Select the components for your board",
+  // metadataBase: new URL(env.NEXT_PUBLIC_APP_URL),
+  title: 'Build a Board',
+  description: 'Select the components for your board',
 }
 
 interface BuildABoadPageProps {
@@ -28,69 +30,72 @@ interface BuildABoadPageProps {
   }
 }
 
-export default async function BuildABoardPage({
-  searchParams,
-}: BuildABoadPageProps) {
-  const { page, per_page, sort, subcategory, price_range, active } =
-    productsSearchParamsSchema.parse(searchParams)
+export default async function BuildABoardPage({ searchParams }: BuildABoadPageProps) {
+  const { subcategory } = productsSearchParamsSchema.parse(searchParams)
 
   // Products transaction
-  const limit = typeof per_page === "string" ? parseInt(per_page) : 8
-  const offset = typeof page === "string" ? (parseInt(page) - 1) * limit : 0
-  const activeSubcategory =
-    typeof subcategory === "string" ? subcategory : "decks"
+  const activeSubcategory = typeof subcategory === 'string' ? subcategory : 'decks'
 
-  // const { data, pageCount } = await getProducts({
-  //   limit,
-  //   offset,
-  //   sort: typeof sort === "string" ? sort : null,
-  //   subcategories: activeSubcategory,
-  //   price_range: typeof price_range === "string" ? price_range : null,
-  //   active,
-  // })
+  const { data: productData, pageCount: productPageCount } = await getProducts(searchParams)
 
   // Get cart items
-  const cartId = cookies().get("cartId")?.value
-  const cartItems = await getCartItems({ cartId })
+  const cartId = cookies().get('cartId')?.value
+  // const cartItems = await getCartItems({ cartId: Number(cartId) })
+
+  const cartItems = [
+    {
+      productId: '1',
+      quantity: 2,
+      subcategoryId: 'l0jYag7qWjwN37lm',
+    },
+    {
+      productId: '2',
+      quantity: 1,
+      subcategoryId: 'LGkWZx4WJ8OrKzrd',
+    },
+    {
+      productId: '3',
+      quantity: 4,
+      subcategoryId: '2IPQCynoZbQyYqlJ',
+    },
+  ]
 
   return (
-    <Shell className="gap-4">
-      <PageHeader
-        id="build-a-board-header"
-        aria-labelledby="build-a-board-header-heading"
-      >
-        <PageHeaderHeading size="sm">Build a Board</PageHeaderHeading>
-        <PageHeaderDescription size="sm">
+    <Shell className='gap-4'>
+      <PageHeader id='build-a-board-header' aria-labelledby='build-a-board-header-heading'>
+        <PageHeaderHeading size='sm'>Build a Board</PageHeaderHeading>
+        <PageHeaderDescription size='sm'>
           Select the components for your board
         </PageHeaderDescription>
       </PageHeader>
-      {/* <section
-        className="sticky top-14 z-30 w-full shrink-0 overflow-hidden bg-background/50 pb-4 pt-6 shadow-md sm:backdrop-blur"
+      <section
+        id='build-a-board-categories'
+        aria-labelledby='build-a-board-categories-heading'
+        className='sticky top-14 z-30 w-full shrink-0 overflow-hidden bg-background/50 pb-4 pt-6 shadow-md sm:backdrop-blur'
       >
-        <div className="grid place-items-center overflow-x-auto">
-          <div className="inline-flex w-fit items-center rounded border bg-background p-1 text-muted-foreground shadow-2xl">
-            {productCategories[0]?.subcategories.map((subcategory) => (
+        <div className='grid place-items-center overflow-x-auto'>
+          <div className='inline-flex w-fit items-center rounded border bg-background p-1 text-muted-foreground shadow-2xl'>
+            {productCategoriesConfig[0]?.subcategories.map((subcategory) => (
               <Link
-                aria-label={subcategory.title}
-                key={subcategory.title}
+                aria-label={subcategory.name}
+                key={subcategory.name}
                 href={`/build-a-board?subcategory=${subcategory.slug}`}
                 scroll={false}
               >
                 <div
                   className={cn(
-                    "inline-flex items-center justify-center whitespace-nowrap rounded border-b-2 border-transparent px-3 py-1.5 text-sm font-medium ring-offset-background transition-all hover:bg-muted hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
+                    'inline-flex items-center justify-center whitespace-nowrap rounded border-b-2 border-transparent px-3 py-1.5 text-sm font-medium ring-offset-background transition-all hover:bg-muted hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2',
                     subcategory.slug === activeSubcategory &&
-                      "rounded-none border-primary text-foreground hover:rounded-t"
+                      'rounded-none border-primary text-foreground hover:rounded-t'
                   )}
                 >
-                  {cartItems
-                    ?.map((item) => item.subcategory)
-                    ?.includes(subcategory.slug) ? (
-                    <CheckIcon className="mr-2 size-4" aria-hidden="true" />
+                  {/* {cartItems?.map((item) => item.subcategory)?.includes(subcategory.slug) ? (
+                    <CheckIcon className='mr-2 h-4 w-4' aria-hidden='true' />
                   ) : (
-                    <CircleIcon className="mr-2 size-4" aria-hidden="true" />
-                  )}
-                  {subcategory.title}
+                    <CircleIcon className='mr-2 h-4 w-4' aria-hidden='true' />
+                  )} */}
+                  <CheckIcon className='mr-2 h-4 w-4' aria-hidden='true' />
+                  {subcategory.name}
                 </div>
               </Link>
             ))}
@@ -98,11 +103,11 @@ export default async function BuildABoardPage({
         </div>
       </section>
       <BoardBuilder
-        products={data}
-        pageCount={pageCount}
+        products={productData}
+        pageCount={productPageCount}
         subcategory={activeSubcategory}
         cartItems={cartItems ?? []}
-      /> */}
+      />
     </Shell>
   )
 }
