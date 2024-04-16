@@ -44,11 +44,11 @@ export interface SearchParams {
   [key: string]: string | string[] | undefined
 }
 
-// export interface Option {
-//   label: string
-//   value: string
-//   icon?: React.ComponentType<{ className?: string }>
-// }
+export interface Option {
+  label: string
+  value: string
+  icon?: React.ComponentType<{ className?: string }>
+}
 
 // export type FileWithPreview = FileWithPath & {
 //   preview: string

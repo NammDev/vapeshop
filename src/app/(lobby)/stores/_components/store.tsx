@@ -16,10 +16,9 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import { StoreCard } from '@/components/cards/store-card'
-// import { PaginationButton } from '@/components/pagination-button'
-
-// import { FacetedFilter } from './faceted-filter'
+import { PaginationButton } from '@/components/app-ui/pagination-button'
 import { queryConfig } from '@/config/query'
+import { FacetedFilter } from '@/components/app-logic/facedted-filter'
 
 type StoresProps = Awaited<ReturnType<typeof getStores>>
 
@@ -107,12 +106,12 @@ export function Stores({ data: stores, pageCount }: StoresProps) {
           </DropdownMenuContent>
         </DropdownMenu>
         <div className='flex flex-1 items-center space-x-2'>
-          {/* <FacetedFilter
+          <FacetedFilter
             title='Status'
             filterValues={filterValues}
             setFilterValues={setFilterValues}
             options={queryConfig.store.sortOptions}
-          /> */}
+          />
           {filterValues.length > 0 && (
             <Button
               aria-label='Reset filters'
@@ -139,7 +138,7 @@ export function Stores({ data: stores, pageCount }: StoresProps) {
           <StoreCard key={store.id} href={`/products?store_ids=${store.id}`} store={store} />
         ))}
       </div>
-      {/* {stores.length ? (
+      {stores.length ? (
         <PaginationButton
           pageCount={pageCount}
           page={page}
@@ -147,7 +146,7 @@ export function Stores({ data: stores, pageCount }: StoresProps) {
           sort={sort}
           createQueryString={createQueryString}
         />
-      ) : null} */}
+      ) : null}
     </section>
   )
 }
