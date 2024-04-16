@@ -14,7 +14,7 @@ import {
   SheetTrigger,
 } from '@/components/ui/sheet'
 import { CartLineItems } from '@/components/checkout/cart-line-items'
-import { Icons } from '@/components/icons'
+import { Icons } from '@/components/app-ui/icons'
 
 export async function CartSheet() {
   const cartLineItems = await getCart()

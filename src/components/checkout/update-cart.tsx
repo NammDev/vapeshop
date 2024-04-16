@@ -1,13 +1,13 @@
-"use client"
+'use client'
 
-import * as React from "react"
-import { MinusIcon, PlusIcon, TrashIcon } from "@radix-ui/react-icons"
+import * as React from 'react'
+import { MinusIcon, PlusIcon, TrashIcon } from '@radix-ui/react-icons'
 
-import { deleteCartItem, updateCartItem } from "@/lib/actions/cart"
-import { showErrorToast } from "@/lib/handle-error"
-import { type CartLineItemSchema } from "@/lib/validations/cart"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
+import { deleteCartItem, updateCartItem } from '@/lib/actions/cart'
+import { showErrorToast } from '@/lib/handle-error'
+import { type CartLineItemSchema } from '@/lib/validations/cart'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
 
 interface UpdateCartProps {
   cartLineItem: CartLineItemSchema
@@ -18,13 +18,13 @@ export function UpdateCart({ cartLineItem }: UpdateCartProps) {
   const [isPending, startTransition] = React.useTransition()
 
   return (
-    <div className="flex w-full items-center justify-between space-x-2 xs:w-auto xs:justify-normal">
-      <div className="flex items-center">
+    <div className='flex w-full items-center justify-between space-x-2 xs:w-auto xs:justify-normal'>
+      <div className='flex items-center'>
         <Button
           id={`${id}-decrement`}
-          variant="outline"
-          size="icon"
-          className="size-8 rounded-r-none"
+          variant='outline'
+          size='icon'
+          className='size-8 rounded-r-none'
           onClick={() => {
             startTransition(async () => {
               try {
@@ -39,14 +39,14 @@ export function UpdateCart({ cartLineItem }: UpdateCartProps) {
           }}
           disabled={isPending}
         >
-          <MinusIcon className="size-3" aria-hidden="true" />
-          <span className="sr-only">Remove one item</span>
+          <MinusIcon className='size-3' aria-hidden='true' />
+          <span className='sr-only'>Remove one item</span>
         </Button>
         <Input
           id={`${id}-quantity`}
-          type="number"
-          min="0"
-          className="h-8 w-14 rounded-none border-x-0"
+          type='number'
+          min='0'
+          className='h-8 w-14 rounded-none border-x-0'
           value={cartLineItem.quantity}
           onChange={(e) => {
             startTransition(async () => {
@@ -64,9 +64,9 @@ export function UpdateCart({ cartLineItem }: UpdateCartProps) {
         />
         <Button
           id={`${id}-increment`}
-          variant="outline"
-          size="icon"
-          className="size-8 rounded-l-none"
+          variant='outline'
+          size='icon'
+          className='size-8 rounded-l-none'
           onClick={() => {
             startTransition(async () => {
               try {
@@ -81,15 +81,15 @@ export function UpdateCart({ cartLineItem }: UpdateCartProps) {
           }}
           disabled={isPending}
         >
-          <PlusIcon className="size-3" aria-hidden="true" />
-          <span className="sr-only">Add one item</span>
+          <PlusIcon className='size-3' aria-hidden='true' />
+          <span className='sr-only'>Add one item</span>
         </Button>
       </div>
       <Button
         id={`${id}-delete`}
-        variant="outline"
-        size="icon"
-        className="size-8"
+        variant='outline'
+        size='icon'
+        className='size-8'
         onClick={() => {
           startTransition(async () => {
             try {
@@ -103,8 +103,8 @@ export function UpdateCart({ cartLineItem }: UpdateCartProps) {
         }}
         disabled={isPending}
       >
-        <TrashIcon className="size-3" aria-hidden="true" />
-        <span className="sr-only">Delete item</span>
+        <TrashIcon className='size-3' aria-hidden='true' />
+        <span className='sr-only'>Delete item</span>
       </Button>
     </div>
   )

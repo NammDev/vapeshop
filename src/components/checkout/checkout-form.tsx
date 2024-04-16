@@ -1,34 +1,30 @@
-"use client"
+'use client'
 
-import * as React from "react"
+import * as React from 'react'
 import {
   AddressElement,
   LinkAuthenticationElement,
   PaymentElement,
   useElements,
   useStripe,
-} from "@stripe/react-stripe-js"
-import { toast } from "sonner"
+} from '@stripe/react-stripe-js'
+import { toast } from 'sonner'
 
-import { absoluteUrl, cn } from "@/lib/utils"
-import { Button } from "@/components/ui/button"
-import { Icons } from "@/components/icons"
+import { absoluteUrl, cn } from '@/lib/utils'
+import { Button } from '@/components/ui/button'
+import { Icons } from '@/components/app-ui/icons'
 
 // See the stripe playemnts docs: https://stripe.com/docs/payments/quickstart
 
-interface CheckoutFormProps extends React.ComponentPropsWithoutRef<"form"> {
+interface CheckoutFormProps extends React.ComponentPropsWithoutRef<'form'> {
   storeId: string
 }
 
-export function CheckoutForm({
-  storeId,
-  className,
-  ...props
-}: CheckoutFormProps) {
+export function CheckoutForm({ storeId, className, ...props }: CheckoutFormProps) {
   const id = React.useId()
   const stripe = useStripe()
   const elements = useElements()
-  const [email, setEmail] = React.useState("")
+  const [email, setEmail] = React.useState('')
   const [message, setMessage] = React.useState<string | null>(null)
   const [isLoading, setIsLoading] = React.useState(false)
 
@@ -36,29 +32,27 @@ export function CheckoutForm({
     if (!stripe) return
 
     const clientSecret = new URLSearchParams(window.location.search).get(
-      "payment_intent_client_secret"
+      'payment_intent_client_secret'
     )
 
     if (!clientSecret) return
 
-    void stripe
-      .retrievePaymentIntent(clientSecret)
-      .then(({ paymentIntent }) => {
-        switch (paymentIntent?.status) {
-          case "succeeded":
-            setMessage("Payment succeeded!")
-            break
-          case "processing":
-            setMessage("Your payment is processing.")
-            break
-          case "requires_payment_method":
-            setMessage("Your payment was not successful, please try again.")
-            break
-          default:
-            setMessage("Something went wrong.")
-            break
-        }
-      })
+    void stripe.retrievePaymentIntent(clientSecret).then(({ paymentIntent }) => {
+      switch (paymentIntent?.status) {
+        case 'succeeded':
+          setMessage('Payment succeeded!')
+          break
+        case 'processing':
+          setMessage('Your payment is processing.')
+          break
+        case 'requires_payment_method':
+          setMessage('Your payment was not successful, please try again.')
+          break
+        default:
+          setMessage('Something went wrong.')
+          break
+      }
+    })
   }, [stripe])
 
   async function onSubmit(event: React.FormEvent<HTMLFormElement>) {
@@ -87,10 +81,10 @@ export function CheckoutForm({
     // your `return_url`. For some payment methods like iDEAL, your customer will
     // be redirected to an intermediate site first to authorize the payment, then
     // redirected to the `return_url`.
-    if (error.type === "card_error" || error.type === "validation_error") {
-      setMessage(error.message ?? "Something went wrong, please try again.")
+    if (error.type === 'card_error' || error.type === 'validation_error') {
+      setMessage(error.message ?? 'Something went wrong, please try again.')
     } else {
-      setMessage("Something went wrong, please try again.")
+      setMessage('Something went wrong, please try again.')
     }
 
     toast.error(message)
@@ -102,7 +96,7 @@ export function CheckoutForm({
     <form
       id={`${id}-checkout-form`}
       aria-labelledby={`${id}-checkout-form-heading`}
-      className={cn("grid gap-4", className)}
+      className={cn('grid gap-4', className)}
       onSubmit={(...args) => void onSubmit(...args)}
       {...props}
     >
@@ -110,30 +104,22 @@ export function CheckoutForm({
         id={`${id}-link-authentication-element`}
         onChange={(e) => setEmail(e.value.email)}
       />
-      <AddressElement
-        id={`${id}-address-element`}
-        options={{ mode: "shipping" }}
-      />
+      <AddressElement id={`${id}-address-element`} options={{ mode: 'shipping' }} />
       <PaymentElement
         id={`${id}-payment-element`}
         options={{
-          layout: "tabs",
+          layout: 'tabs',
         }}
       />
       <Button
-        type="submit"
-        aria-label="Pay"
+        type='submit'
+        aria-label='Pay'
         id={`${id}-checkout-form-submit`}
-        variant="secondary"
-        className="w-full bg-blue-600 hover:bg-blue-500 hover:shadow-md"
+        variant='secondary'
+        className='w-full bg-blue-600 hover:bg-blue-500 hover:shadow-md'
         disabled={!stripe || !elements || isLoading}
       >
-        {isLoading && (
-          <Icons.spinner
-            className="mr-2 size-4 animate-spin"
-            aria-hidden="true"
-          />
-        )}
+        {isLoading && <Icons.spinner className='mr-2 size-4 animate-spin' aria-hidden='true' />}
         Pay
       </Button>
     </form>
