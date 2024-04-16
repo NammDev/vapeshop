@@ -10,7 +10,7 @@ import '@/styles/globals.css'
 import { cn } from '@/lib/utils'
 import { fontHeading, fontMono, fontSans } from '@/lib/fonts'
 import { Toaster } from '@/components/ui/toaster'
-import { ThemeProvider } from '@/components/providers'
+import { ThemeProvider } from '@/components/app-logic/providers'
 
 // export const metadata: Metadata = {
 //   metadataBase: new URL(env.NEXT_PUBLIC_APP_URL),
