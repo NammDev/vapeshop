@@ -13,7 +13,7 @@ export function generateId(length = 16) {
 }
 
 export function absoluteUrl(path: string) {
-  // return `${env.NEXT_PUBLIC_APP_URL}${path}`
+  return `${process.env.NEXT_PUBLIC_APP_URL}${path}`
 }
 
 export function formatPrice(price: number | string, options: Intl.NumberFormatOptions = {}) {
