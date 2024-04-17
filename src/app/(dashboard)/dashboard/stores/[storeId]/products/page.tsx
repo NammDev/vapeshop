@@ -50,7 +50,6 @@ export default async function ProductsPage({ params, searchParams }: ProductsPag
         <DateRangePicker align='end' />
       </div>
       <React.Suspense fallback={<DataTableSkeleton columnCount={6} />}>
-        Hello
         <ProductsTable
           categoriesPromise={categoriesPromise}
           promise={productsPromise}

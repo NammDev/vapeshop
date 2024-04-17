@@ -389,7 +389,7 @@ export async function getProductsTable(searchParams: SearchParams, storeId: stri
           and(
             eq(products.storeId, storeId),
             // Filter by name
-            eq(products.name, `%${name}%`),
+            // eq(products.name, `%${name}%`),
             // Filter by category
             categoryIds.length > 0 ? inArray(products.categoryId, categoryIds) : undefined,
             // Filter by createdAt
@@ -415,7 +415,7 @@ export async function getProductsTable(searchParams: SearchParams, storeId: stri
           and(
             eq(products.storeId, storeId),
             // Filter by name
-            eq(products.name, `%${name}%`),
+            // eq(products.name, `%${name}%`),
             // Filter by category
             categoryIds.length > 0 ? inArray(products.categoryId, categoryIds) : undefined,
             // Filter by createdAt

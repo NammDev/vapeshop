@@ -2,7 +2,6 @@
 
 import * as React from 'react'
 import Link from 'next/link'
-import { type Product } from '@/db/schema'
 import { DotsHorizontalIcon } from '@radix-ui/react-icons'
 import { type ColumnDef } from '@tanstack/react-table'
 import { toast } from 'sonner'
@@ -31,11 +30,6 @@ interface ProductsTableProps {
   categoriesPromise: ReturnType<typeof getCategories>
   storeId: string
 }
-
-// type AwaitedProduct = Pick<
-//   Product,
-//   'id' | 'name' | 'categoryId' | 'price' | 'inventory' | 'rating' | 'createdAt'
-// >
 
 type AwaitedProduct = Awaited<ReturnType<typeof getProductsTable>>['data'][0]
 
@@ -205,14 +199,14 @@ export function ProductsTable({ promise, categoriesPromise, storeId }: ProductsT
         value: 'name',
         label: 'Name',
       },
-      // {
-      //   value: "category",
-      //   label: "Category",
-      //   options: products.category.enumValues.map((category) => ({
-      //     label: `${category.charAt(0).toUpperCase()}${category.slice(1)}`,
-      //     value: category,
-      //   })),
-      // },
+      {
+        value: 'category',
+        label: 'Category',
+        // options: products.category.enumValues.map((category) => ({
+        //   label: `${category.charAt(0).toUpperCase()}${category.slice(1)}`,
+        //   value: category,
+        // })),
+      },
     ],
   })
 
