@@ -26,7 +26,7 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from '@/components/ui/pagination'
-// import { DateRangePicker } from '@/components/date-range-picker'
+import { DateRangePicker } from '@/components/app-logic/date-range-picker'
 
 import { OverviewCard } from './_components/overview-card'
 import { SalesChart } from './_components/sales-chart'
@@ -108,7 +108,7 @@ export default async function AnalyticsPage({ params, searchParams }: AnalyticsP
     <div className='space-y-6 p-1'>
       <div className='flex flex-col gap-4 xs:flex-row xs:items-center xs:justify-between'>
         <h2 className='text-2xl font-bold tracking-tight'>Analytics</h2>
-        {/* <DateRangePicker align='end' dayCount={30} /> */}
+        <DateRangePicker align='end' dayCount={30} />
       </div>
       <div className='grid gap-4 md:grid-cols-2 lg:grid-cols-4'>
         <OverviewCard
