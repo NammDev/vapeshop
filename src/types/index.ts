@@ -1,5 +1,5 @@
 import { type SQL } from 'drizzle-orm'
-// import { type FileWithPath } from 'react-dropzone'
+import { type FileWithPath } from 'react-dropzone'
 // import type Stripe from 'stripe'
 // import { type ClientUploadedFileData } from 'uploadthing/types'
 import { type z } from 'zod'
@@ -50,9 +50,9 @@ export interface Option {
   icon?: React.ComponentType<{ className?: string }>
 }
 
-// export type FileWithPreview = FileWithPath & {
-//   preview: string
-// }
+export type FileWithPreview = FileWithPath & {
+  preview: string
+}
 
 // export interface UploadedFile<T = unknown> extends ClientUploadedFileData<T> {}
 

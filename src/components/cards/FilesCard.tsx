@@ -1,12 +1,12 @@
 import Image from 'next/image'
-import type { StoredFile } from '@/types'
+import type { FileWithPreview, StoredFile } from '@/types'
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area'
 import { EmptyCard } from '@/components/cards/empty-card'
 
 interface FilesCardProps {
-  files: StoredFile[]
+  files: FileWithPreview[]
 }
 
 export function FilesCard({ files }: FilesCardProps) {
@@ -21,9 +21,9 @@ export function FilesCard({ files }: FilesCardProps) {
           <ScrollArea className='pb-4'>
             <div className='flex w-max space-x-2.5'>
               {files.map((file) => (
-                <div key={file.id} className='relative aspect-video w-64'>
+                <div key={file.path} className='relative aspect-video w-64'>
                   <Image
-                    src={file.url}
+                    src={file.preview}
                     alt={file.name}
                     fill
                     sizes='(min-width: 640px) 640px, 100vw'

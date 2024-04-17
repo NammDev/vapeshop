@@ -46,7 +46,11 @@ import { FileUploader } from '@/components/app-logic/file-uploader'
 import { Icons } from '@/components/app-ui/icons'
 import { Zoom } from '@/components/app-logic/zoom-image'
 import Image from 'next/image'
-import { StoredFile } from '@/types'
+import { FileWithPreview, StoredFile } from '@/types'
+import { FileDialog } from './file-dialog'
+import type { OurFileRouter } from '@/app/api/uploadthing/core'
+import { generateReactHelpers } from '@uploadthing/react/hooks'
+import { isArrayOfFile } from '@/lib/utils'
 
 interface UpdateProductFormProps {
   product: Product
@@ -55,15 +59,36 @@ interface UpdateProductFormProps {
     subcategories: Awaited<ReturnType<typeof getSubcategories>>
   }>
 }
+const { useUploadThing } = generateReactHelpers<OurFileRouter>()
 
 export function UpdateProductForm({ product, promises }: UpdateProductFormProps) {
+  const [files, setFiles] = React.useState<FileWithPreview[] | null>(null)
   const { categories, subcategories } = React.use(promises)
   const router = useRouter()
-  const [isUpdating, setIsUpdating] = React.useState(false)
   const [isDeleting, setIsDeleting] = React.useState(false)
-  const { uploadFiles, progresses, uploadedFiles, isUploading } = useUploadFile('productImage', {
-    defaultUploadedFiles: product.images ?? [],
-  })
+  const { isUploading, startUpload } = useUploadThing('productImage')
+  const [isPending, startTransition] = React.useTransition()
+
+  // const { uploadFiles, progresses, uploadedFiles, isUploading } = useUploadFile('productImage', {
+  //   defaultUploadedFiles: product.images ?? [],
+  // })
+
+  React.useEffect(() => {
+    if (product.images && product.images.length > 0) {
+      setFiles(
+        product.images.map((image) => {
+          const file = new File([], image.name, {
+            type: 'image',
+          })
+          const fileWithPreview = Object.assign(file, {
+            preview: image.url,
+          })
+
+          return fileWithPreview
+        })
+      )
+    }
+  }, [product])
 
   const form = useForm<UpdateProductSchema>({
     resolver: zodResolver(updateProductSchema),
@@ -79,29 +104,53 @@ export function UpdateProductForm({ product, promises }: UpdateProductFormProps)
   })
 
   async function onSubmit(input: UpdateProductSchema) {
-    setIsUpdating(true)
+    startTransition(async () => {
+      try {
+        const images = isArrayOfFile(input.images)
+          ? await startUpload(input.images).then((res) => {
+              const formattedImages = res?.map((image) => ({
+                id: image.key,
+                name: image.key.split('_')[1] ?? image.key,
+                url: image.url,
+              }))
+              return formattedImages ?? null
+            })
+          : null
 
-    toast.promise(
-      uploadFiles(input.images ?? []).then(() => {
-        return updateProduct({
+        await updateProduct({
           ...input,
           storeId: product.storeId,
           id: product.id,
         })
-      }),
-      {
-        loading: 'Uploading images...',
-        success: () => {
-          form.reset()
-          setIsUpdating(false)
-          return 'Images uploaded'
-        },
-        error: (err) => {
-          setIsUpdating(false)
-          return getErrorMessage(err)
-        },
+
+        toast.success('Product updated successfully.')
+        setFiles(null)
+      } catch (err) {
+        console.log(err)
       }
-    )
+    })
+
+    // toast.promise(
+    //   uploadFiles(input.images ?? []).then(() => {
+    //     return updateProduct({
+    //       ...input,
+    //       storeId: product.storeId,
+    //       id: product.id,
+    //     })
+    //   }),
+    //   {
+    //     loading: 'Uploading images...',
+    //     success: () => {
+    //       form.reset()
+    //       setIsUpdating(false)
+    //       return 'Images uploaded'
+    //     },
+    //     error: (err) => {
+    //       setIsUpdating(false)
+    //       return getErrorMessage(err)
+    //     },
+    //   }
+    // )
   }
 
   return (
@@ -221,7 +270,42 @@ export function UpdateProductForm({ product, promises }: UpdateProductFormProps)
             <UncontrolledFormMessage message={form.formState.errors.inventory?.message} />
           </FormItem>
         </div>
-        <FormField
+
+        <FormItem className='flex w-full flex-col gap-1.5'>
+          <FormLabel>Images</FormLabel>
+          {files?.length ? (
+            <div className='flex items-center gap-2'>
+              {files.map((file, i) => (
+                <Zoom key={i}>
+                  <Image
+                    src={file.preview}
+                    alt={file.name}
+                    className='object-cover object-center w-20 h-20 rounded-md shrink-0'
+                    width={80}
+                    height={80}
+                  />
+                </Zoom>
+              ))}
+            </div>
+          ) : null}
+          <FormControl>
+            <FileDialog
+              setValue={form.setValue}
+              name='images'
+              maxFiles={3}
+              maxSize={1024 * 1024 * 4}
+              files={files}
+              setFiles={setFiles}
+              isUploading={isUploading}
+              disabled={isUploading}
+            />
+          </FormControl>
+          <UncontrolledFormMessage message={form.formState.errors.images?.message} />
+        </FormItem>
+
+        {files && files?.length > 0 ? <FilesCard files={files} /> : null}
+
+        {/* <FormField
           control={form.control}
           name='images'
           render={({ field }) => (
@@ -268,13 +352,14 @@ export function UpdateProductForm({ product, promises }: UpdateProductFormProps)
               <UncontrolledFormMessage message={form.formState.errors.images?.message} />
             </FormItem>
           )}
-        />
-        {uploadedFiles.length > 0 ? <FilesCard files={uploadedFiles} /> : null}
+        /> */}
+
         <div className='flex space-x-2'>
-          <Button type='submit' disabled={isDeleting || isUpdating}>
-            {isUpdating && (
-              <Icons.spinner className='mr-2 size-4 animate-spin' aria-hidden='true' />
-            )}
+          <Button type='submit' disabled={isDeleting || isUploading || isPending}>
+            {isUploading ||
+              (isPending && (
+                <Icons.spinner className='mr-2 size-4 animate-spin' aria-hidden='true' />
+              ))}
             Update Product
             <span className='sr-only'>Update product</span>
           </Button>

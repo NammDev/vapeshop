@@ -16,6 +16,12 @@ export function absoluteUrl(path: string) {
   return `${process.env.NEXT_PUBLIC_APP_URL}${path}`
 }
 
+export function isArrayOfFile(files: unknown): files is File[] {
+  const isArray = Array.isArray(files)
+  if (!isArray) return false
+  return files.every((file) => file instanceof File)
+}
+
 export function formatPrice(price: number | string, options: Intl.NumberFormatOptions = {}) {
   return new Intl.NumberFormat('en-US', {
     style: 'currency',
