@@ -42,7 +42,7 @@ import {
 } from '@/components/ui/select'
 import { Textarea } from '@/components/ui/textarea'
 import { FilesCard } from '@/components/cards/FilesCard'
-import { FileUploader } from '@/components/file-uploader'
+import { FileUploader } from '@/components/app-logic/file-uploader'
 import { Icons } from '@/components/app-ui/icons'
 
 interface UpdateProductFormProps {
