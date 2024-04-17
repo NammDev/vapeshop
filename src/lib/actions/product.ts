@@ -14,6 +14,7 @@ import {
   type addProductSchema,
   type updateProductRatingSchema,
 } from '@/lib/validations/product'
+import { storesProductsSearchParamsSchema } from '../validations/params'
 
 // See the unstable_cache API docs: https://nextjs.org/docs/app/api-reference/functions/unstable_cache
 export async function getFeaturedProducts() {
@@ -339,6 +340,104 @@ export async function deleteProduct(input: { id: string; storeId: string }) {
     return {
       data: null,
       error: getErrorMessage(err),
+    }
+  }
+}
+
+export async function getProductsTable(searchParams: SearchParams, storeId: string) {
+  noStore()
+
+  try {
+    // Parse search params using zod schema
+    const { page, per_page, sort, name, category, from, to } =
+      storesProductsSearchParamsSchema.parse(searchParams)
+
+    // Fallback page for invalid page numbers
+    const fallbackPage = isNaN(page) || page < 1 ? 1 : page
+    // Number of items per page
+    const limit = isNaN(per_page) ? 10 : per_page
+    // Number of items to skip
+    const offset = fallbackPage > 0 ? (fallbackPage - 1) * limit : 0
+    // Column and order to sort by
+    const [column, order] = (sort?.split('.') as [
+      keyof Product | undefined,
+      'asc' | 'desc' | undefined
+    ]) ?? ['createdAt', 'desc']
+
+    const categoryIds = category?.split('.') ?? []
+
+    const fromDay = from ? new Date(from) : undefined
+    const toDay = to ? new Date(to) : undefined
+
+    // Transaction is used to ensure both queries are executed in a single transaction
+    const transaction = db.transaction(async (tx) => {
+      const data = await tx
+        .select({
+          id: products.id,
+          name: products.name,
+          category: categories.name,
+          price: products.price,
+          inventory: products.inventory,
+          rating: products.rating,
+          createdAt: products.createdAt,
+        })
+        .from(products)
+        .limit(limit)
+        .offset(offset)
+        .leftJoin(categories, eq(products.categoryId, categories.id))
+        .where(
+          and(
+            eq(products.storeId, storeId),
+            // Filter by name
+            eq(products.name, `%${name}%`),
+            // Filter by category
+            categoryIds.length > 0 ? inArray(products.categoryId, categoryIds) : undefined,
+            // Filter by createdAt
+            fromDay && toDay
+              ? and(gte(products.createdAt, fromDay), lte(products.createdAt, toDay))
+              : undefined
+          )
+        )
+        .orderBy(
+          column && column in products
+            ? order === 'asc'
+              ? asc(products[column])
+              : desc(products[column])
+            : desc(products.createdAt)
+        )
+
+      const total = await tx
+        .select({
+          count: sql<number>`count(${products.id})`,
+        })
+        .from(products)
+        .where(
+          and(
+            eq(products.storeId, storeId),
+            // Filter by name
+            eq(products.name, `%${name}%`),
+            // Filter by category
+            categoryIds.length > 0 ? inArray(products.categoryId, categoryIds) : undefined,
+            // Filter by createdAt
+            fromDay && toDay
+              ? and(gte(products.createdAt, fromDay), lte(products.createdAt, toDay))
+              : undefined
+          )
+        )
+        .then((res) => res[0]?.count ?? 0)
+      const pageCount = Math.ceil(total / limit)
+      return {
+        data,
+        pageCount,
+      }
+    })
+
+    return transaction
+  } catch (err) {
+    console.log(err)
+    return {
+      data: [],
+      pageCount: 0,
     }
   }
 }

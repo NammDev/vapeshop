@@ -62,12 +62,12 @@ export interface StoredFile {
   url: string
 }
 
-// export interface DataTableFilterField<TData> {
-//   label: string
-//   value: keyof TData
-//   placeholder?: string
-//   options?: Option[]
-// }
+export interface DataTableFilterField<TData> {
+  label: string
+  value: keyof TData
+  placeholder?: string
+  options?: Option[]
+}
 
 // export type DrizzleWhere<T> = SQL<unknown> | ((aliases: T) => SQL<T> | undefined) | undefined
 
