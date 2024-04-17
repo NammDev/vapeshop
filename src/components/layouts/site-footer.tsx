@@ -5,7 +5,7 @@ import { buttonVariants } from '@/components/ui/button'
 import { Shell } from '../app-ui/shell'
 import { Icons } from '../app-ui/icons'
 import { siteConfig } from '@/config/site'
-// import { JoinNewsletterForm } from '@/components/forms/join-newsletter-form'
+import { JoinNewsletterForm } from '@/components/forms/join-newsletter-form'
 import { ModeToggle } from '@/components/layouts/mode-toggle'
 
 export function SiteFooter() {
@@ -52,7 +52,7 @@ export function SiteFooter() {
           </section>
           <section id='newsletter' aria-labelledby='newsletter-heading' className='space-y-3'>
             <h4 className='text-base font-medium'>Subscribe to our newsletter</h4>
-            {/* <JoinNewsletterForm /> */}
+            <JoinNewsletterForm />
           </section>
         </section>
         <section
