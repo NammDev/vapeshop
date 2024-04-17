@@ -18,7 +18,7 @@ export function FilesCard({ files }: FilesCardProps) {
       </CardHeader>
       <CardContent>
         {files.length > 0 ? (
-          <ScrollArea className='pb-4'>
+          <ScrollArea className='w-[50rem] pb-4 '>
             <div className='flex w-max space-x-2.5'>
               {files.map((file) => (
                 <div key={file.path} className='relative aspect-video w-64'>

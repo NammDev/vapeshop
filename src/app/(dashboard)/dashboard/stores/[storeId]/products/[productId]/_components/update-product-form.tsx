@@ -12,16 +12,8 @@ import { type getCategories } from '@/lib/actions/category'
 import { type getSubcategories } from '@/lib/actions/sub-category'
 import { getErrorMessage } from '@/lib/handle-error'
 import { updateProductSchema, type UpdateProductSchema } from '@/lib/validations/product'
-import { useUploadFile } from '@/hooks/use-upload-file'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from '@/components/ui/dialog'
 import {
   Form,
   FormControl,
@@ -42,15 +34,15 @@ import {
 } from '@/components/ui/select'
 import { Textarea } from '@/components/ui/textarea'
 import { FilesCard } from '@/components/cards/FilesCard'
-import { FileUploader } from '@/components/app-logic/file-uploader'
 import { Icons } from '@/components/app-ui/icons'
 import { Zoom } from '@/components/app-logic/zoom-image'
 import Image from 'next/image'
-import { FileWithPreview, StoredFile } from '@/types'
+import { FileWithPreview } from '@/types'
 import { FileDialog } from './file-dialog'
 import type { OurFileRouter } from '@/app/api/uploadthing/core'
 import { generateReactHelpers } from '@uploadthing/react/hooks'
 import { isArrayOfFile } from '@/lib/utils'
+import { EmptyCard } from '@/components/cards/empty-card'
 
 interface UpdateProductFormProps {
   product: Product
@@ -62,9 +54,10 @@ interface UpdateProductFormProps {
 const { useUploadThing } = generateReactHelpers<OurFileRouter>()
 
 export function UpdateProductForm({ product, promises }: UpdateProductFormProps) {
+  const router = useRouter()
+
   const [files, setFiles] = React.useState<FileWithPreview[] | null>(null)
   const { categories, subcategories } = React.use(promises)
-  const router = useRouter()
   const [isDeleting, setIsDeleting] = React.useState(false)
   const { isUploading, startUpload } = useUploadThing('productImage')
   const [isPending, startTransition] = React.useTransition()
@@ -104,7 +97,6 @@ export function UpdateProductForm({ product, promises }: UpdateProductFormProps)
   })
 
   async function onSubmit(input: UpdateProductSchema) {
-    console.log('hello')
     startTransition(async () => {
       try {
         const images = isArrayOfFile(input.images)
@@ -155,7 +147,7 @@ export function UpdateProductForm({ product, promises }: UpdateProductFormProps)
             <FormItem>
               <FormLabel>Description</FormLabel>
               <FormControl>
-                <Textarea placeholder='Type product description here.' {...field} />
+                <Textarea placeholder='Type product description here.' rows={6} {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -252,21 +244,35 @@ export function UpdateProductForm({ product, promises }: UpdateProductFormProps)
 
         <FormItem className='flex w-full flex-col gap-1.5'>
           <FormLabel>Images</FormLabel>
-          {files?.length ? (
-            <div className='flex items-center gap-2'>
-              {files.map((file, i) => (
-                <Zoom key={i}>
-                  <Image
-                    src={file.preview}
-                    alt={file.name}
-                    className='object-cover object-center w-20 h-20 rounded-md shrink-0'
-                    width={80}
-                    height={80}
-                  />
-                </Zoom>
-              ))}
-            </div>
-          ) : null}
+          <Card>
+            <CardHeader>
+              <CardTitle>Uploaded files</CardTitle>
+              <CardDescription>View the uploaded files here</CardDescription>
+            </CardHeader>
+            <CardContent>
+              {files?.length ? (
+                <div className='flex items-center gap-2'>
+                  {files.map((file, i) => (
+                    <Zoom key={i}>
+                      <Image
+                        src={file.preview}
+                        alt={file.name}
+                        className='object-cover object-center w-20 h-20 rounded-md shrink-0'
+                        width={80}
+                        height={80}
+                      />
+                    </Zoom>
+                  ))}
+                </div>
+              ) : (
+                <EmptyCard
+                  title='No files uploaded'
+                  description='Upload some files to see them here'
+                  className='w-full'
+                />
+              )}
+            </CardContent>
+          </Card>
           <FormControl>
             <FileDialog
               setValue={form.setValue}
@@ -335,10 +341,9 @@ export function UpdateProductForm({ product, promises }: UpdateProductFormProps)
 
         <div className='flex space-x-2'>
           <Button type='submit' disabled={isDeleting || isUploading || isPending}>
-            {isUploading ||
-              (isPending && (
-                <Icons.spinner className='mr-2 size-4 animate-spin' aria-hidden='true' />
-              ))}
+            {isUploading && (
+              <Icons.spinner className='mr-2 size-4 animate-spin' aria-hidden='true' />
+            )}
             Update Product
             <span className='sr-only'>Update product</span>
           </Button>
