@@ -163,7 +163,7 @@ export function ProductsTable({ promise, categoriesPromise, storeId }: ProductsT
         ),
       },
     ],
-    [data, isPending, storeId]
+    [categories, data, isPending, storeId]
   )
 
   function deleteSelectedRows() {
