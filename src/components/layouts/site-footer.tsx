@@ -6,7 +6,7 @@ import { Shell } from '../app-ui/shell'
 import { Icons } from '../app-ui/icons'
 import { siteConfig } from '@/config/site'
 // import { JoinNewsletterForm } from '@/components/forms/join-newsletter-form'
-// import { ModeToggle } from '@/components/layouts/mode-toggle'
+import { ModeToggle } from '@/components/layouts/mode-toggle'
 
 export function SiteFooter() {
   return (
@@ -88,7 +88,7 @@ export function SiteFooter() {
               <Icons.gitHub className='size-4' aria-hidden='true' />
               <span className='sr-only'>GitHub</span>
             </Link>
-            {/* <ModeToggle /> */}
+            <ModeToggle />
           </div>
         </section>
       </Shell>
