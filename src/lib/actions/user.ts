@@ -52,40 +52,46 @@ export const getCacheduser = cache(async () => {
 //   }
 // }
 
-// export async function getProgress(input: { userId: string }) {
-//   noStore()
+export async function getProgress(input: { userId: string }) {
+  noStore()
 
-//   const fallback = {
-//     storeCount: 0,
-//     storeLimit: 0,
-//     productCount: 0,
-//     productLimit: 0,
-//     subscriptionPlan: null,
-//   }
+  const fallback = {
+    storeCount: 0,
+    storeLimit: 0,
+    productCount: 0,
+    productLimit: 0,
+    subscriptionPlan: null,
+  }
 
-//   try {
-//     const subscriptionPlan = await getSubscriptionPlan({ userId: input.userId })
+  try {
+    // const subscriptionPlan = await getSubscriptionPlan({ userId: input.userId })
 
-//     if (!subscriptionPlan) {
-//       return fallback
-//     }
+    // if (!subscriptionPlan) {
+    //   return fallback
+    // }
 
-//     const { storeCount, productCount } = await getUsage({
-//       userId: input.userId,
-//     })
+    // const { storeCount, productCount } = await getUsage({
+    //   userId: input.userId,
+    // })
 
-//     const { storeLimit, productLimit } = getPlanLimits({
-//       planTitle: subscriptionPlan.title,
-//     })
+    // const { storeLimit, productLimit } = getPlanLimits({
+    //   planTitle: subscriptionPlan.title,
+    // })
 
-//     return {
-//       storeCount,
-//       storeLimit,
-//       productCount,
-//       productLimit,
-//       subscriptionPlan,
-//     }
-//   } catch (err) {
-//     return fallback
-//   }
-// }
+    const progress = {
+      storeCount: 2,
+      storeLimit: 5,
+      productCount: 10,
+      productLimit: 100,
+      subscriptionPlan: {
+        title: 'Standard',
+      },
+    }
+
+    return {
+      ...progress,
+    }
+  } catch (err) {
+    return fallback
+  }
+}

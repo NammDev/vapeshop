@@ -3,7 +3,7 @@ import type { Metadata } from 'next'
 import { redirect } from 'next/navigation'
 // import { env } from '@/env.js'
 
-// import {  getProgress } from '@/lib/actions/user'
+import { getProgress } from '@/lib/actions/user'
 import {
   PageHeader,
   PageHeaderDescription,
@@ -30,7 +30,7 @@ export default async function StoresPage() {
   }
 
   const storesPromise = getStoresByUserId({ userId: user.id })
-  //   const progressPromise = getProgress({ userId: user.id })
+  const progressPromise = getProgress({ userId: user.id })
 
   return (
     <Shell variant='sidebar'>
@@ -39,10 +39,7 @@ export default async function StoresPage() {
           <PageHeaderHeading size='sm' className='flex-1'>
             Stores
           </PageHeaderHeading>
-          <AddStoreDialog
-            userId={user.id}
-            //  progressPromise={progressPromise}
-          />
+          <AddStoreDialog userId={user.id} progressPromise={progressPromise} />
         </div>
         <PageHeaderDescription size='sm'>Manage your stores</PageHeaderDescription>
       </PageHeader>
