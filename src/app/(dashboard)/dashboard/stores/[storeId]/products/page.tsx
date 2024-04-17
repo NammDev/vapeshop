@@ -11,6 +11,10 @@ import { DataTableSkeleton } from '@/components/data-table/data-table-skeleton'
 import { ProductsTable } from '@/components/table/products-table'
 import { getProductsTable } from '@/lib/actions/product'
 import { getCategories } from '@/lib/actions/category'
+import { Button, buttonVariants } from '@/components/ui/button'
+import { Icons } from '@/components/app-ui/icons'
+import Link from 'next/link'
+import { cn } from '@/lib/utils'
 
 export const metadata: Metadata = {
   // metadataBase: new URL(env.NEXT_PUBLIC_APP_URL),
@@ -49,6 +53,17 @@ export default async function ProductsPage({ params, searchParams }: ProductsPag
         <h2 className='text-2xl font-bold tracking-tight'>Products</h2>
         <DateRangePicker align='end' />
       </div>
+      <Link
+        href={`/dashboard/stores/${encodeURIComponent(storeId)}/products/new`}
+        className={cn(
+          buttonVariants({
+            size: 'sm',
+            variant: 'default',
+          })
+        )}
+      >
+        Create product
+      </Link>
       <React.Suspense fallback={<DataTableSkeleton columnCount={6} />}>
         <ProductsTable
           categoriesPromise={categoriesPromise}
