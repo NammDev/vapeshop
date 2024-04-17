@@ -104,6 +104,7 @@ export function UpdateProductForm({ product, promises }: UpdateProductFormProps)
   })
 
   async function onSubmit(input: UpdateProductSchema) {
+    console.log('hello')
     startTransition(async () => {
       try {
         const images = isArrayOfFile(input.images)
@@ -116,7 +117,7 @@ export function UpdateProductForm({ product, promises }: UpdateProductFormProps)
               return formattedImages ?? null
             })
           : null
-
+        console.log('vao day ko ta')
         await updateProduct({
           ...input,
           storeId: product.storeId,
@@ -129,28 +130,6 @@ export function UpdateProductForm({ product, promises }: UpdateProductFormProps)
         console.log(err)
       }
     })
-
-    // toast.promise(
-    //   uploadFiles(input.images ?? []).then(() => {
-    //     return updateProduct({
-    //       ...input,
-    //       storeId: product.storeId,
-    //       id: product.id,
-    //     })
-    //   }),
-    //   {
-    //     loading: 'Uploading images...',
-    //     success: () => {
-    //       form.reset()
-    //       setIsUpdating(false)
-    //       return 'Images uploaded'
-    //     },
-    //     error: (err) => {
-    //       setIsUpdating(false)
-    //       return getErrorMessage(err)
-    //     },
-    //   }
-    // )
   }
 
   return (

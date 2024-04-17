@@ -233,7 +233,8 @@ function FileCard({ i, file, files, setFiles }: FileCardProps) {
           loading='lazy'
         />
         <div className='flex flex-col'>
-          <p className='text-sm font-medium line-clamp-1 text-muted-foreground'>{file.name}</p>
+          {file.name.length > 35 ? `${file.name.slice(0, 32)}...` : file.name}
+          <p className='text-sm font-medium line-clamp-1 text-muted-foreground'></p>
           <p className='text-xs text-slate-500'>{(file.size / 1024 / 1024).toFixed(2)}MB</p>
         </div>
       </div>
@@ -242,7 +243,7 @@ function FileCard({ i, file, files, setFiles }: FileCardProps) {
           <Dialog open={isOpen} onOpenChange={setIsOpen}>
             <DialogTrigger asChild>
               <Button type='button' variant='outline' size='icon' className='h-7 w-7'>
-                <CropIcon className='w-4 h-4 text-white' aria-hidden='true' />
+                <CropIcon className='w-4 h-4' aria-hidden='true' />
                 <span className='sr-only'>Crop image</span>
               </Button>
             </DialogTrigger>
@@ -310,7 +311,7 @@ function FileCard({ i, file, files, setFiles }: FileCardProps) {
             setFiles(files.filter((_, j) => j !== i))
           }}
         >
-          <Cross2Icon className='w-4 h-4 text-white' aria-hidden='true' />
+          <Cross2Icon className='w-4 h-4' aria-hidden='true' />
           <span className='sr-only'>Remove file</span>
         </Button>
       </div>
