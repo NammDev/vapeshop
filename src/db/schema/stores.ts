@@ -4,7 +4,7 @@ import { boolean, text, timestamp, varchar } from 'drizzle-orm/pg-core'
 
 import { generateId } from '@/lib/utils'
 
-// import { payments } from './payments'
+import { payments } from './payments'
 import { products } from './products'
 
 export const stores = pgTable('stores', {
@@ -23,7 +23,7 @@ export const stores = pgTable('stores', {
 
 export const storesRelations = relations(stores, ({ many }) => ({
   products: many(products),
-  // payments: many(payments),
+  payments: many(payments),
 }))
 
 export type Store = typeof stores.$inferSelect
