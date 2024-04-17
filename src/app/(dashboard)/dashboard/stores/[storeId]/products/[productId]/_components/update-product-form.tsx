@@ -44,6 +44,9 @@ import { Textarea } from '@/components/ui/textarea'
 import { FilesCard } from '@/components/cards/FilesCard'
 import { FileUploader } from '@/components/app-logic/file-uploader'
 import { Icons } from '@/components/app-ui/icons'
+import { Zoom } from '@/components/app-logic/zoom-image'
+import Image from 'next/image'
+import { StoredFile } from '@/types'
 
 interface UpdateProductFormProps {
   product: Product
@@ -130,7 +133,6 @@ export function UpdateProductForm({ product, promises }: UpdateProductFormProps)
             </FormItem>
           )}
         />
-
         <div className='flex flex-col items-start gap-6 sm:flex-row'>
           <FormField
             control={form.control}
@@ -223,38 +225,51 @@ export function UpdateProductForm({ product, promises }: UpdateProductFormProps)
           control={form.control}
           name='images'
           render={({ field }) => (
-            <div className='space-y-6'>
-              <FormItem className='w-full'>
-                <FormLabel>Images</FormLabel>
-                <FormControl>
-                  <Dialog>
-                    <DialogTrigger asChild>
-                      <Button variant='outline'>Upload files</Button>
-                    </DialogTrigger>
-                    <DialogContent className='sm:max-w-xl'>
-                      <DialogHeader>
-                        <DialogTitle>Upload files</DialogTitle>
-                        <DialogDescription>
-                          Drag and drop your files here or click to browse.
-                        </DialogDescription>
-                      </DialogHeader>
-                      <FileUploader
-                        value={field.value ?? []}
-                        onValueChange={field.onChange}
-                        maxFiles={4}
-                        maxSize={4 * 1024 * 1024}
-                        progresses={progresses}
-                        disabled={isUploading}
+            <FormItem className='flex w-full flex-col gap-1.5'>
+              <FormLabel>Images</FormLabel>
+              {uploadedFiles?.length ? (
+                <div className='flex items-center gap-2'>
+                  {uploadedFiles.map((file, i) => (
+                    <Zoom key={i}>
+                      <Image
+                        src={file.url}
+                        alt={file.name}
+                        className='object-cover object-center w-20 h-20 rounded-md shrink-0'
+                        width={80}
+                        height={80}
                       />
-                    </DialogContent>
-                  </Dialog>
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-              {uploadedFiles.length > 0 ? <FilesCard files={uploadedFiles} /> : null}
-            </div>
+                    </Zoom>
+                  ))}
+                </div>
+              ) : null}
+              <FormControl>
+                <Dialog>
+                  <DialogTrigger asChild>
+                    <Button variant='outline'>Upload files</Button>
+                  </DialogTrigger>
+                  <DialogContent className='sm:max-w-xl'>
+                    <DialogHeader>
+                      <DialogTitle>Upload files</DialogTitle>
+                      <DialogDescription>
+                        Drag and drop your files here or click to browse.
+                      </DialogDescription>
+                    </DialogHeader>
+                    <FileUploader
+                      value={field.value ?? []}
+                      onValueChange={field.onChange}
+                      maxFiles={4}
+                      maxSize={4 * 1024 * 1024}
+                      progresses={progresses}
+                      disabled={isUploading}
+                    />
+                  </DialogContent>
+                </Dialog>
+              </FormControl>
+              <UncontrolledFormMessage message={form.formState.errors.images?.message} />
+            </FormItem>
           )}
         />
+        {uploadedFiles.length > 0 ? <FilesCard files={uploadedFiles} /> : null}
         <div className='flex space-x-2'>
           <Button type='submit' disabled={isDeleting || isUpdating}>
             {isUpdating && (
