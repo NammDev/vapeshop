@@ -1,23 +1,18 @@
-import type { Metadata } from "next"
-import { redirect } from "next/navigation"
-import { env } from "@/env.js"
-import { currentUser } from "@clerk/nextjs"
+import type { Metadata } from 'next'
+import { redirect } from 'next/navigation'
+// import { env } from "@/env.js"
+import { currentUser } from '@clerk/nextjs'
 
-import { getCategories, getSubcategories } from "@/lib/actions/product"
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card"
+import { getCategories } from '@/lib/actions/category'
+import { getSubcategories } from '@/lib/actions/sub-category'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 
-import { AddProductForm } from "./_components/add-product-form"
+import { AddProductForm } from './_components/add-product-form'
 
 export const metadata: Metadata = {
-  metadataBase: new URL(env.NEXT_PUBLIC_APP_URL),
-  title: "New Product",
-  description: "Add a new product",
+  // metadataBase: new URL(env.NEXT_PUBLIC_APP_URL),
+  title: 'New Product',
+  description: 'Add a new product',
 }
 
 interface NewProductPageProps {
@@ -32,7 +27,7 @@ export default async function NewProductPage({ params }: NewProductPageProps) {
   const user = await currentUser()
 
   if (!user) {
-    redirect("/sigin")
+    redirect('/sigin')
   }
 
   const promises = Promise.all([getCategories(), getSubcategories()]).then(
@@ -41,8 +36,8 @@ export default async function NewProductPage({ params }: NewProductPageProps) {
 
   return (
     <Card>
-      <CardHeader className="space-y-1">
-        <CardTitle className="text-2xl">Add product</CardTitle>
+      <CardHeader className='space-y-1'>
+        <CardTitle className='text-2xl'>Add product</CardTitle>
         <CardDescription>Add a new product to your store</CardDescription>
       </CardHeader>
       <CardContent>

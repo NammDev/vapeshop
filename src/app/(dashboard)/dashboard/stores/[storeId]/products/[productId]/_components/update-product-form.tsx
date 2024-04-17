@@ -37,7 +37,7 @@ import { FilesCard } from '@/components/cards/FilesCard'
 import { Icons } from '@/components/app-ui/icons'
 import { Zoom } from '@/components/app-logic/zoom-image'
 import Image from 'next/image'
-import { FileWithPreview } from '@/types'
+import { FileWithPreview, StoredFile } from '@/types'
 import { FileDialog } from './file-dialog'
 import type { OurFileRouter } from '@/app/api/uploadthing/core'
 import { generateReactHelpers } from '@uploadthing/react/hooks'
@@ -109,7 +109,6 @@ export function UpdateProductForm({ product, promises }: UpdateProductFormProps)
               return formattedImages ?? null
             })
           : null
-        console.log('vao day ko ta')
         await updateProduct({
           ...input,
           storeId: product.storeId,

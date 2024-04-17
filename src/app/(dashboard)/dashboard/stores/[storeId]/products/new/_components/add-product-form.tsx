@@ -1,24 +1,17 @@
 'use client'
 
 import * as React from 'react'
-import type { StoredFile } from '@/types'
+import type { FileWithPreview, StoredFile } from '@/types'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 
-import { addProduct, type getCategories, type getSubcategories } from '@/lib/actions/product'
-import { getErrorMessage } from '@/lib/handle-error'
+import { addProduct } from '@/lib/actions/product'
+import { type getCategories } from '@/lib/actions/category'
+import { type getSubcategories } from '@/lib/actions/sub-category'
 import { addProductSchema, type AddProductSchema } from '@/lib/validations/product'
-import { useUploadFile } from '@/hooks/use-upload-file'
 import { Button } from '@/components/ui/button'
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from '@/components/ui/dialog'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import {
   Form,
   FormControl,
@@ -26,6 +19,7 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
+  UncontrolledFormMessage,
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import {
@@ -38,8 +32,15 @@ import {
 } from '@/components/ui/select'
 import { Textarea } from '@/components/ui/textarea'
 import { FilesCard } from '@/components/cards/FilesCard'
-import { FileUploader } from '@/components/file-uploader'
-import { Icons } from '@/components/icons'
+// import { FileUploader } from '@/components/file-uploader'
+import { Icons } from '@/components/app-ui/icons'
+import type { OurFileRouter } from '@/app/api/uploadthing/core'
+import { generateReactHelpers } from '@uploadthing/react/hooks'
+import { isArrayOfFile } from '@/lib/utils'
+import { Zoom } from '@/components/app-logic/zoom-image'
+import Image from 'next/image'
+import { EmptyCard } from '@/components/cards/empty-card'
+import { FileDialog } from '../../[productId]/_components/file-dialog'
 
 interface AddProductFormProps {
   storeId: string
@@ -49,11 +50,17 @@ interface AddProductFormProps {
   }>
 }
 
+const { useUploadThing } = generateReactHelpers<OurFileRouter>()
+
 export function AddProductForm({ storeId, promises }: AddProductFormProps) {
   const { categories, subcategories } = React.use(promises)
 
   const [loading, setLoading] = React.useState(false)
-  const { uploadFiles, progresses, uploadedFiles, isUploading } = useUploadFile('productImage')
+  const { isUploading, startUpload } = useUploadThing('productImage')
+  const [isPending, startTransition] = React.useTransition()
+  const [files, setFiles] = React.useState<FileWithPreview[] | null>(null)
+
+  // const { uploadFiles, progresses, uploadedFiles, isUploading } = useUploadFile('productImage')
 
   const form = useForm<AddProductSchema>({
     resolver: zodResolver(addProductSchema),
@@ -70,28 +77,32 @@ export function AddProductForm({ storeId, promises }: AddProductFormProps) {
 
   function onSubmit(input: AddProductSchema) {
     setLoading(true)
-
-    toast.promise(
-      uploadFiles(input.images ?? []).then(() => {
-        return addProduct({
+    startTransition(async () => {
+      try {
+        const images = isArrayOfFile(input.images)
+          ? await startUpload(input.images).then((res) => {
+              const formattedImages = res?.map((image) => ({
+                id: image.key,
+                name: image.key.split('_')[1] ?? image.key,
+                url: image.url,
+              }))
+              return formattedImages ?? null
+            })
+          : null
+        await addProduct({
           ...input,
           storeId,
-          images: JSON.stringify(uploadedFiles) as unknown as StoredFile[],
+          images: JSON.stringify(images) as unknown as StoredFile[],
         })
-      }),
-      {
-        loading: 'Adding product...',
-        success: () => {
-          form.reset()
-          setLoading(false)
-          return 'Product'
-        },
-        error: (err) => {
-          setLoading(false)
-          return getErrorMessage(err)
-        },
+
+        toast.success('Product created successfully.')
+        setFiles(null)
+      } catch (err) {
+        console.log(err)
+      } finally {
+        setLoading(false)
       }
-    )
+    })
   }
 
   return (
@@ -245,42 +256,53 @@ export function AddProductForm({ storeId, promises }: AddProductFormProps) {
               </FormItem>
             )}
           />
-          <FormField
-            control={form.control}
-            name='images'
-            render={({ field }) => (
-              <div className='space-y-6'>
-                <FormItem className='w-full'>
-                  <FormLabel>Images</FormLabel>
-                  <FormControl>
-                    <Dialog>
-                      <DialogTrigger asChild>
-                        <Button variant='outline'>Upload files</Button>
-                      </DialogTrigger>
-                      <DialogContent className='sm:max-w-xl'>
-                        <DialogHeader>
-                          <DialogTitle>Upload files</DialogTitle>
-                          <DialogDescription>
-                            Drag and drop your files here or click to browse.
-                          </DialogDescription>
-                        </DialogHeader>
-                        <FileUploader
-                          value={field.value ?? []}
-                          onValueChange={field.onChange}
-                          maxFiles={4}
-                          maxSize={4 * 1024 * 1024}
-                          progresses={progresses}
-                          disabled={isUploading}
+          <FormItem className='flex w-full flex-col gap-1.5'>
+            <FormLabel>Images</FormLabel>
+            <Card>
+              <CardHeader>
+                <CardTitle>Uploaded files</CardTitle>
+                <CardDescription>View the uploaded files here</CardDescription>
+              </CardHeader>
+              <CardContent>
+                {files?.length ? (
+                  <div className='flex items-center gap-2'>
+                    {files.map((file, i) => (
+                      <Zoom key={i}>
+                        <Image
+                          src={file.preview}
+                          alt={file.name}
+                          className='object-cover object-center w-20 h-20 rounded-md shrink-0'
+                          width={80}
+                          height={80}
                         />
-                      </DialogContent>
-                    </Dialog>
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-                {uploadedFiles.length > 0 ? <FilesCard files={uploadedFiles} /> : null}
-              </div>
-            )}
-          />
+                      </Zoom>
+                    ))}
+                  </div>
+                ) : (
+                  <EmptyCard
+                    title='No files uploaded'
+                    description='Upload some files to see them here'
+                    className='w-full'
+                  />
+                )}
+              </CardContent>
+            </Card>
+            <FormControl>
+              <FileDialog
+                setValue={form.setValue}
+                name='images'
+                maxFiles={3}
+                maxSize={1024 * 1024 * 4}
+                files={files}
+                setFiles={setFiles}
+                isUploading={isUploading}
+                disabled={isUploading}
+              />
+            </FormControl>
+            <UncontrolledFormMessage message={form.formState.errors.images?.message} />
+          </FormItem>
+
+          {files && files?.length > 0 ? <FilesCard files={files} /> : null}
         </div>
         <Button
           onClick={() => void form.trigger(['name', 'description', 'price', 'inventory'])}
