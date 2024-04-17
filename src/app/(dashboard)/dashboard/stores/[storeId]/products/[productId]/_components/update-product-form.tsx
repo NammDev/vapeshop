@@ -55,7 +55,6 @@ interface UpdateProductFormProps {
 
 export function UpdateProductForm({ product, promises }: UpdateProductFormProps) {
   const { categories, subcategories } = React.use(promises)
-
   const router = useRouter()
   const [isUpdating, setIsUpdating] = React.useState(false)
   const [isDeleting, setIsDeleting] = React.useState(false)
@@ -66,6 +65,7 @@ export function UpdateProductForm({ product, promises }: UpdateProductFormProps)
   const form = useForm<UpdateProductSchema>({
     resolver: zodResolver(updateProductSchema),
     defaultValues: {
+      id: product.id,
       name: product.name,
       description: product.description ?? '',
       categoryId: product.categoryId,
@@ -75,7 +75,7 @@ export function UpdateProductForm({ product, promises }: UpdateProductFormProps)
     },
   })
 
-  function onSubmit(input: UpdateProductSchema) {
+  async function onSubmit(input: UpdateProductSchema) {
     setIsUpdating(true)
 
     toast.promise(
@@ -256,7 +256,7 @@ export function UpdateProductForm({ product, promises }: UpdateProductFormProps)
           )}
         />
         <div className='flex space-x-2'>
-          <Button disabled={isDeleting || isUpdating}>
+          <Button type='submit' disabled={isDeleting || isUpdating}>
             {isUpdating && (
               <Icons.spinner className='mr-2 size-4 animate-spin' aria-hidden='true' />
             )}
