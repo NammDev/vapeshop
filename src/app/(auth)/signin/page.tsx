@@ -10,9 +10,9 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card'
-// import { OAuthSignIn } from '@/app/(auth)/_components/oauth-signin'
 import { Shell } from '@/components/app-ui/shell'
 import { SignInForm } from '../_componnents/signin-form'
+import { OAuthSignIn } from '../_componnents/oauth-signin'
 
 export const metadata: Metadata = {
   //   metadataBase: new URL(env.NEXT_PUBLIC_APP_URL),
@@ -29,7 +29,7 @@ export default function SignInPage() {
           <CardDescription>Choose your preferred sign in method</CardDescription>
         </CardHeader>
         <CardContent className='grid gap-4'>
-          {/* <OAuthSignIn /> */}
+          <OAuthSignIn />
           <div className='relative'>
             <div className='absolute inset-0 flex items-center'>
               <span className='w-full border-t' />

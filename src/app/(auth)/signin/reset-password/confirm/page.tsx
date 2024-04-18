@@ -4,7 +4,6 @@ import { type Metadata } from 'next'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Shell } from '@/components/app-ui/shell'
 import { ResetPasswordConfirmForm } from '@/app/(auth)/_componnents/reset-password-confirm-form'
-// import { ResetPasswordConfirmForm } from '@/app/(auth)/_components/reset-password-confirm-form'
 
 export const metadata: Metadata = {
   //   metadataBase: new URL(env.NEXT_PUBLIC_APP_URL),
