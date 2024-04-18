@@ -10,6 +10,8 @@ import {
 import { Shell } from '@/components/app-ui/shell'
 import { getStores } from '@/lib/actions/store'
 import { Products } from '@/components/app-logic/products'
+import { getCategories } from '@/lib/actions/category'
+import { getSubcategoriesByCategory } from '@/lib/actions/sub-category'
 
 export const metadata: Metadata = {
   // metadataBase: new URL(env.NEXT_PUBLIC_APP_URL),
@@ -27,6 +29,10 @@ export default async function ProductsPage({ searchParams }: ProductsPageProps) 
     { data: storeData, pageCount: storePageCount },
   ] = await Promise.all([getProducts(searchParams), getStores(searchParams)])
 
+  const categoryData = await getCategories()
+  const categoryId = categoryData[0]?.id || '' // Ensure categoryId is always a string
+  const subCategoryData = await getSubcategoriesByCategory({ categoryId })
+
   return (
     <Shell>
       <PageHeader>
@@ -37,6 +43,9 @@ export default async function ProductsPage({ searchParams }: ProductsPageProps) 
         products={productData}
         pageCount={productPageCount}
         // categories={Object.values(products.category.enumValues)}
+        // category={categoryData[0]}
+        categories={categoryData}
+        // subcategories={subCategoryData}
         stores={storeData}
         storePageCount={storePageCount}
       />

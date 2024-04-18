@@ -44,7 +44,7 @@ import { getProducts } from '@/lib/actions/product'
 interface ProductsProps {
   products: Awaited<ReturnType<typeof getProducts>>['data']
   pageCount: number
-  categories?: string[]
+  categories?: Awaited<ReturnType<typeof getCategories>>
   category?: Awaited<ReturnType<typeof getCategories>>[number]
   subcategories?: Awaited<ReturnType<typeof getSubcategoriesByCategory>>
   stores?: Pick<Store & { productCount: number }, 'id' | 'name' | 'productCount'>[]
@@ -268,8 +268,8 @@ export function Products({
                     selected={selectedCategories}
                     setSelected={setSelectedCategories}
                     options={categories.map((c) => ({
-                      label: toTitleCase(c),
-                      value: c,
+                      label: toTitleCase(c.name),
+                      value: c.name,
                     }))}
                   />
                 </Card>
