@@ -39,7 +39,6 @@ export default async function CategoryPage({ params, searchParams }: CategoryPag
   ] = await Promise.all([getProducts(searchParams), getStores(searchParams)])
 
   const categoryData = await getCategories()
-  const categoryId = categoryData[0]?.id || '' // Ensure categoryId is always a string
   const subCategoryData = await getSubcategoriesByCategory({ categoryId: '6bi0Ip7BfCKe7D1q' })
 
   return (

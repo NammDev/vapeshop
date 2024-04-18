@@ -7,8 +7,6 @@ import type { Option } from '@/types'
 import { ChevronDownIcon, ChevronLeftIcon, ChevronRightIcon } from '@radix-ui/react-icons'
 
 import { queryConfig } from '@/config/query'
-import { type getCategories } from '@/lib/actions/category'
-import { type getSubcategoriesByCategory } from '@/lib/actions/sub-category'
 import { cn, toTitleCase, truncate } from '@/lib/utils'
 import { useDebounce } from '@/hooks/use-debounce'
 import { Button } from '@/components/ui/button'
@@ -40,6 +38,8 @@ import { ProductCard } from '@/components/cards/product-card'
 import { MultiSelect } from '@/components/app-ui/multi-select'
 import { PaginationButton } from '@/components/app-ui/pagination-button'
 import { getProducts } from '@/lib/actions/product'
+import { getSubcategoriesByCategory } from '@/lib/actions/sub-category'
+import { getCategories } from '@/lib/actions/category'
 
 interface ProductsProps {
   products: Awaited<ReturnType<typeof getProducts>>['data']
@@ -274,21 +274,19 @@ export function Products({
                   />
                 </Card>
               ) : null}
-              {category ? (
+              {category && subcategories ? (
                 <Card className='space-y-4 rounded-lg p-3'>
                   <h3 className='text-sm font-medium tracking-wide text-foreground'>
-                    Subcategories
+                    {toTitleCase(category.name)} Subcategories
                   </h3>
                   <MultiSelect
-                    placeholder='Select subcategories'
+                    placeholder={`Select subcategories`}
                     selected={selectedSubcategories}
                     setSelected={setSelectedSubcategories}
-                    options={
-                      subcategories?.map((c) => ({
-                        label: c.name,
-                        value: c.id,
-                      })) ?? []
-                    }
+                    options={subcategories.map((c) => ({
+                      label: toTitleCase(c.name),
+                      value: c.name,
+                    }))}
                   />
                 </Card>
               ) : null}

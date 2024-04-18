@@ -36,7 +36,7 @@ export async function getSubcategoriesByCategory({ categoryId }: { categoryId: s
           description: subcategories.description,
         })
         .from(subcategories)
-        .where(eq(subcategories.id, categoryId))
+        .where(eq(subcategories.categoryId, categoryId))
     },
     [`subcategories-${categoryId}`],
     {
