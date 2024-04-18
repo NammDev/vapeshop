@@ -49,7 +49,7 @@
     "@uploadthing/react": "^6.4.4",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.0",
-    "cmdk": "^1.0.0",
+    "cmdk": "^0.2.1",
     "contentlayer": "^0.3.4",
     "date-fns": "^3.6.0",
     "dotenv": "^16.4.5",

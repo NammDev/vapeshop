@@ -30,8 +30,6 @@ export default async function ProductsPage({ searchParams }: ProductsPageProps) 
   ] = await Promise.all([getProducts(searchParams), getStores(searchParams)])
 
   const categoryData = await getCategories()
-  const categoryId = categoryData[0]?.id || '' // Ensure categoryId is always a string
-  const subCategoryData = await getSubcategoriesByCategory({ categoryId })
 
   return (
     <Shell>
@@ -42,10 +40,7 @@ export default async function ProductsPage({ searchParams }: ProductsPageProps) 
       <Products
         products={productData}
         pageCount={productPageCount}
-        // categories={Object.values(products.category.enumValues)}
-        // category={categoryData[0]}
         categories={categoryData}
-        // subcategories={subCategoryData}
         stores={storeData}
         storePageCount={storePageCount}
       />

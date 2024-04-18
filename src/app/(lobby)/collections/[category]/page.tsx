@@ -10,6 +10,8 @@ import { Products } from '@/components/app-logic/products'
 import { Shell } from '@/components/app-ui/shell'
 import { getProducts } from '@/lib/actions/product'
 import { getStores } from '@/lib/actions/store'
+import { getCategories } from '@/lib/actions/category'
+import { getSubcategoriesByCategory } from '@/lib/actions/sub-category'
 
 interface CategoryPageProps {
   params: {
@@ -36,6 +38,10 @@ export default async function CategoryPage({ params, searchParams }: CategoryPag
     { data: storeData, pageCount: storePageCount },
   ] = await Promise.all([getProducts(searchParams), getStores(searchParams)])
 
+  const categoryData = await getCategories()
+  const categoryId = categoryData[0]?.id || '' // Ensure categoryId is always a string
+  const subCategoryData = await getSubcategoriesByCategory({ categoryId: '6bi0Ip7BfCKe7D1q' })
+
   return (
     <Shell>
       <PageHeader>
@@ -47,7 +53,8 @@ export default async function CategoryPage({ params, searchParams }: CategoryPag
       <Products
         products={productData}
         pageCount={productPageCount}
-        // categories={category}
+        category={categoryData[0]}
+        subcategories={subCategoryData}
         stores={storeData}
         storePageCount={storePageCount}
       />
