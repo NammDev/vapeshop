@@ -10,7 +10,7 @@ import { Products } from '@/components/app-logic/products'
 import { Shell } from '@/components/app-ui/shell'
 import { getProducts } from '@/lib/actions/product'
 import { getStores } from '@/lib/actions/store'
-import { getCategories } from '@/lib/actions/category'
+import { getCategoryByName } from '@/lib/actions/category'
 import { getSubcategoriesByCategory } from '@/lib/actions/sub-category'
 
 interface CategoryPageProps {
@@ -33,13 +33,19 @@ export function generateMetadata({ params }: CategoryPageProps): Metadata {
 export default async function CategoryPage({ params, searchParams }: CategoryPageProps) {
   const { category } = params
 
+  const modifiedSearchParams = {
+    ...searchParams,
+    categories: `${category}`,
+  }
+
   const [
     { data: productData, pageCount: productPageCount },
     { data: storeData, pageCount: storePageCount },
-  ] = await Promise.all([getProducts(searchParams), getStores(searchParams)])
+  ] = await Promise.all([getProducts(modifiedSearchParams), getStores(modifiedSearchParams)])
 
-  const categoryData = await getCategories()
-  const subCategoryData = await getSubcategoriesByCategory({ categoryId: '6bi0Ip7BfCKe7D1q' })
+  const categoryData = await getCategoryByName({ categoryName: category })
+  const categoryId = categoryData?.id || ''
+  const subCategoryData = await getSubcategoriesByCategory({ categoryId: categoryId })
 
   return (
     <Shell>
@@ -52,7 +58,7 @@ export default async function CategoryPage({ params, searchParams }: CategoryPag
       <Products
         products={productData}
         pageCount={productPageCount}
-        category={categoryData[0]}
+        category={categoryData}
         subcategories={subCategoryData}
         stores={storeData}
         storePageCount={storePageCount}

@@ -9,6 +9,8 @@ import { Products } from '@/components/app-logic/products'
 import { Shell } from '@/components/app-ui/shell'
 import { getProducts } from '@/lib/actions/product'
 import { getStores } from '@/lib/actions/store'
+import { getProductsSchema } from '@/lib/validations/product'
+import { categories } from '@/db/schema'
 
 interface SubcategoryPageProps {
   params: {
@@ -33,15 +35,22 @@ export function generateMetadata({ params }: SubcategoryPageProps): Metadata {
 export default async function SubcategoryPage({ params, searchParams }: SubcategoryPageProps) {
   const { category, subcategory } = params
 
+  const modifiedSearchParams = {
+    ...searchParams,
+    subcategories: `${toTitleCase(subcategory)}`,
+  }
+
   const [
     { data: productData, pageCount: productPageCount },
     { data: storeData, pageCount: storePageCount },
-  ] = await Promise.all([getProducts(searchParams), getStores(searchParams)])
+  ] = await Promise.all([getProducts(modifiedSearchParams), getStores(modifiedSearchParams)])
 
   return (
     <Shell>
       <PageHeader>
-        <PageHeaderHeading size='sm'>{toTitleCase(unslugify(subcategory))}</PageHeaderHeading>
+        <PageHeaderHeading size='sm'>
+          {toTitleCase(unslugify(category))} {toTitleCase(unslugify(subcategory))}
+        </PageHeaderHeading>
         <PageHeaderDescription size='sm'>
           {`Buy the best ${unslugify(subcategory)}`}
         </PageHeaderDescription>

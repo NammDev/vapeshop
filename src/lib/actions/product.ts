@@ -64,8 +64,8 @@ export async function getProducts(input: SearchParams) {
       'asc' | 'desc' | undefined
     ]) ?? ['createdAt', 'desc']
     const [minPrice, maxPrice] = search.price_range?.split('-') ?? []
-    const categoryIds = search.categories?.split('.') ?? []
-    const subcategoryIds = search.subcategories?.split('.') ?? []
+    const categoryNames = search.categories?.split('.') ?? []
+    const subcategoryNames = search.subcategories?.split('.') ?? []
     const storeIds = search.store_ids?.split('.') ?? []
 
     const transaction = await db.transaction(async (tx) => {
@@ -94,8 +94,8 @@ export async function getProducts(input: SearchParams) {
         .leftJoin(subcategories, eq(products.subcategoryId, subcategories.id))
         .where(
           and(
-            categoryIds.length > 0 ? inArray(products.categoryId, categoryIds) : undefined,
-            subcategoryIds.length > 0 ? inArray(products.subcategoryId, subcategoryIds) : undefined,
+            categoryNames.length > 0 ? inArray(categories.name, categoryNames) : undefined,
+            subcategoryNames.length > 0 ? inArray(subcategories.name, subcategoryNames) : undefined,
             minPrice ? gte(products.price, minPrice) : undefined,
             maxPrice ? lte(products.price, maxPrice) : undefined,
             storeIds.length ? inArray(products.storeId, storeIds) : undefined,
@@ -118,8 +118,10 @@ export async function getProducts(input: SearchParams) {
         .from(products)
         .where(
           and(
-            categoryIds.length > 0 ? inArray(products.categoryId, categoryIds) : undefined,
-            subcategoryIds.length > 0 ? inArray(products.subcategoryId, subcategoryIds) : undefined,
+            categoryNames.length > 0 ? inArray(products.categoryId, categoryNames) : undefined,
+            subcategoryNames.length > 0
+              ? inArray(products.subcategoryId, subcategoryNames)
+              : undefined,
             minPrice ? gte(products.price, minPrice) : undefined,
             maxPrice ? lte(products.price, maxPrice) : undefined,
             storeIds.length ? inArray(products.storeId, storeIds) : undefined
