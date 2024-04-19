@@ -7,9 +7,8 @@ import { CheckIcon, CircleIcon } from '@radix-ui/react-icons'
 import { productCategoriesConfig } from '@/config/product'
 // import { getCartItems } from '@/lib/fetchers/cart'
 import { getProducts } from '@/lib/actions/product'
-import { cn } from '@/lib/utils'
+import { cn, toTitleCase } from '@/lib/utils'
 import { productsSearchParamsSchema } from '@/lib/validations/params'
-// import { BoardBuilder } from '@/components/board-builder'
 import {
   PageHeader,
   PageHeaderDescription,
@@ -31,17 +30,17 @@ interface BuildABoadPageProps {
 }
 
 export default async function BuildABoardPage({ searchParams }: BuildABoadPageProps) {
-  const { subcategory } = productsSearchParamsSchema.parse(searchParams)
+  const { subcategories } = productsSearchParamsSchema.parse(searchParams)
 
   // Products transaction
-  const activeSubcategory = typeof subcategory === 'string' ? subcategory : 'decks'
+  const activeSubcategory = typeof subcategories === 'string' ? subcategories : 'Decks'
 
   const { data: productData, pageCount: productPageCount } = await getProducts(searchParams)
 
   // Get cart items
   const cartId = cookies().get('cartId')?.value
-  // const cartItems = await getCartItems({ cartId: Number(cartId) })
 
+  // const cartItems = await getCartItems({ cartId: Number(cartId) })
   const cartItems = [
     {
       productId: '1',
@@ -79,13 +78,13 @@ export default async function BuildABoardPage({ searchParams }: BuildABoadPagePr
               <Link
                 aria-label={subcategory.name}
                 key={subcategory.name}
-                href={`/build-a-board?subcategory=${subcategory.slug}`}
+                href={`/build-a-board?subcategories=${toTitleCase(subcategory.slug)}`}
                 scroll={false}
               >
                 <div
                   className={cn(
                     'inline-flex items-center justify-center whitespace-nowrap rounded border-b-2 border-transparent px-3 py-1.5 text-sm font-medium ring-offset-background transition-all hover:bg-muted hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2',
-                    subcategory.slug === activeSubcategory &&
+                    subcategory.name === activeSubcategory &&
                       'rounded-none border-primary text-foreground hover:rounded-t'
                   )}
                 >
