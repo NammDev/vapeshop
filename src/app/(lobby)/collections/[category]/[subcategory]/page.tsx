@@ -49,7 +49,6 @@ export default async function SubcategoryPage({ params, searchParams }: Subcateg
       <Products
         products={productData}
         pageCount={productPageCount}
-        // categories={category}
         stores={storeData}
         storePageCount={storePageCount}
       />
