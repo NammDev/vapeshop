@@ -11,6 +11,7 @@ interface BreadcrumbsProps extends React.ComponentPropsWithoutRef<'nav'> {
   }[]
   separator?: React.ComponentType<{ className?: string }>
   truncationLength?: number
+  classNameStyle?: string
 }
 
 export function Breadcrumbs({
@@ -18,6 +19,7 @@ export function Breadcrumbs({
   separator,
   truncationLength = 0,
   className,
+  classNameStyle,
   ...props
 }: BreadcrumbsProps) {
   const SeparatorIcon = separator ?? ChevronRightIcon
@@ -41,6 +43,7 @@ export function Breadcrumbs({
               href={segment.href}
               className={cn(
                 'truncate transition-colors hover:text-foreground',
+                classNameStyle,
                 isLastSegment ? 'text-foreground' : 'text-muted-foreground'
               )}
             >

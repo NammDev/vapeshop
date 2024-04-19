@@ -46,32 +46,6 @@ export default async function StorePage({ params, searchParams }: StorePageProps
     notFound()
   }
 
-  const { page, per_page, store_page } = searchParams
-
-  // Products transaction
-  const limit = typeof per_page === 'string' ? parseInt(per_page) : 8
-  const offset = typeof page === 'string' ? (parseInt(page) - 1) * limit : 0
-
-  // const productsTransaction = await getProducts({
-  //   limit: limit,
-  //   offset: offset,
-  //   store_ids: String(store.id),
-  // })
-
-  // const pageCount = Math.ceil(productsTransaction.count / limit)
-
-  // Stores transaction
-  const storesLimit = 25
-  const storesOffset = typeof store_page === 'string' ? (parseInt(store_page) - 1) * storesLimit : 0
-
-  // const storesTransaction = await getStores({
-  //   limit: storesLimit,
-  //   offset: storesOffset,
-  //   sort: 'name.asc',
-  // })
-
-  // const storePageCount = Math.ceil(storesTransaction.count / storesLimit)
-
   return (
     <Shell>
       <Breadcrumbs

@@ -11,6 +11,7 @@ import { getProducts } from '@/lib/actions/product'
 import { getStores } from '@/lib/actions/store'
 import { getProductsSchema } from '@/lib/validations/product'
 import { categories } from '@/db/schema'
+import { Breadcrumbs } from '@/components/app-ui/breadcrumbs'
 
 interface SubcategoryPageProps {
   params: {
@@ -48,9 +49,19 @@ export default async function SubcategoryPage({ params, searchParams }: Subcateg
   return (
     <Shell>
       <PageHeader>
-        <PageHeaderHeading size='sm'>
-          {toTitleCase(unslugify(category))} {toTitleCase(unslugify(subcategory))}
-        </PageHeaderHeading>
+        <Breadcrumbs
+          classNameStyle='font-bold tracking-tighter lg:leading-[1.1] text-2xl md:text-3xl'
+          segments={[
+            {
+              title: `${toTitleCase(unslugify(category))} `,
+              href: `/collections/${category}`,
+            },
+            {
+              title: `${toTitleCase(unslugify(subcategory))}`,
+              href: `/collections/${subcategory}`,
+            },
+          ]}
+        />
         <PageHeaderDescription size='sm'>
           {`Buy the best ${unslugify(subcategory)}`}
         </PageHeaderDescription>
